@@ -43,4 +43,5 @@ public class TeamBean {
     private String fouls;
     private String foulsPG;
     private String games;
+    private String recentGamescore;
 }
