@@ -1,0 +1,7 @@
+9月2日
+对于WinRateBean，
+增加了private String VScore;（储存客场得分）
+增加了private String HScore;（储存主场得分）
+对于TeamBean，
+增加了private String recentGamescore;（储存队伍最近场次得分）
+需爬虫提供，储存数据库同样条目。
