@@ -3,7 +3,7 @@
 <mapper namespace="com.example.SpringBootBatis.mapper.NbaMapper">
 
     <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean"> SELECT *,
-        recentGamescore FROM nba_team <trim prefix="where" suffixOverrides="and">
+        recentGameScore FROM nba_team <trim prefix="where" suffixOverrides="and">
             <if test="seasonId!=null">
                 seasonid=#{seasonId} and
             </if>
@@ -29,7 +29,7 @@
 
 
     <select id="getTeamsRank" parameterType="String" resultType="TeamRankBean">
-        SELECT t1.*, t2.*, t3.*, t1.recentGamescore
+        SELECT t1.*, t2.*, t3.*, t1.recentGameScore, t1.lastTenGames, t1.nextTenGames
         FROM
         (SELECT teamid,
         pointspg,RANK() OVER (ORDER BY pointspg DESC) AS pointspg_rank,
@@ -37,7 +37,9 @@
         assistsPG,RANK() OVER (ORDER BY assistsPG DESC) AS assistsPG_rank,
         stealsPG,RANK() OVER (ORDER BY stealsPG DESC) AS stealsPG_rank,
         blocksPG,RANK() OVER (ORDER BY blocksPG DESC) AS blocksPG_rank,
-        recentGamescore
+        recentGameScore,
+        lastTenGames,
+        nextTenGames
         FROM nba_team
         WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t1,
         (SELECT MAX(pointspg) AS pointspg_max,
