@@ -2,6 +2,8 @@
 对于WinRateBean，
 增加了private String VScore;（储存客场得分）
 增加了private String HScore;（储存主场得分）
+在winRateMapper中，返回数据修改为round(VWINRATE,2) VWinRate, VScore, round(HWINRATE,2) HWinRate, HScore
 对于TeamBean，
 增加了private String recentGamescore;（储存队伍最近场次得分）
+在nbaTeamMapper中，返回数据修改为SELECT t1.*, t2.*, t3.*, t1.recentGamescore
 需爬虫提供，储存数据库同样条目。
