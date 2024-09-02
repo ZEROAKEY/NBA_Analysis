@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.SpringBootBatis.mapper.WinRateMapper">
+
+    <select id="getWinRateSortByIndex" parameterType="String" resultType="WinRateBean">
+        SELECT  round(VWINRATE,2) VWinRate,round(HWINRATE,2) HWinRate FROM win_rate where
+                VisitTeam=#{VisitTeam} and
+                HomeTeam=#{HomeTeam}
+        ;
+    </select>
+
+
+
+
+</mapper>

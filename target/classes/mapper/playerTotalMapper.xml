@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.SpringBootBatis.mapper.PlayerTotalMapper">
+    <select id="getPlayerTotalsByEachParameterAndSortByIndex" parameterType="String" resultType="PlayerTotalBean">
+        SELECT * FROM nba_total
+        <trim prefix="where" suffixOverrides="and">
+            <if test="seasonId!=null">
+                seasonid=#{seasonId} and
+            </if>
+            <if test="seasonType!=null">
+                seasontype=#{seasonType} and
+            </if>
+            <if test="position!=null">
+                (position like "%"#{position}"%"
+                <if test="position!='后卫'">
+                    or position ='锋卫摇摆人'
+                </if>)
+                and
+            </if>
+            <if test="name!=null">
+                (cnname like "%"#{name}"%"
+                or enname like "%"#{name}"%") and
+            </if>
+            <if test="teamId!=null">
+                teamid=#{teamId} and
+            </if>
+            <if test="teamName!=null">
+                teamname like "%"#{teamName}"%" and
+            </if>
+        </trim>
+        <if test="index!=null">
+        order by ${index} desc
+        </if>
+        ;
+    </select>
+
+</mapper>
