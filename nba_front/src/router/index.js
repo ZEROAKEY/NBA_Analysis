@@ -37,7 +37,6 @@ const routes = [
                 {path: '/players', component : PlayerData},
                 {path: '/teams', component : TeamData},
                 {path:'/schedule',component: ScheduleList},
-              
               ]
   }
 ]

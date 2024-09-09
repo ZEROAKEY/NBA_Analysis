@@ -66,6 +66,9 @@
 
 <script>
 export default {
+  created() {
+    this.getGameScheduleList();
+  },
   data() {
     return {
       games: [
@@ -92,6 +95,20 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    //获取比赛日程列表
+    async getGameScheduleList() {
+      const { data: res } = await this.$http.get("winrate", {
+        params: this.queryinfoP,
+      });
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取比赛日程表失败");
+      } else {
+        this.psstGames = res.data.pageData;
+        this.$message.success("获取比赛日程列表成功");
+      }
+    },
   }
 }
 </script>
