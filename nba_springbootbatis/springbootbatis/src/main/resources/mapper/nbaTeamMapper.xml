@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.SpringBootBatis.mapper.NbaMapper">
 
-    <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean">
-        SELECT * FROM nba_team
-        <trim prefix="where" suffixOverrides="and">
+    <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean"> SELECT *,
+        recentGameScore FROM nba_team <trim prefix="where" suffixOverrides="and">
             <if test="seasonId!=null">
                 seasonid=#{seasonId} and
             </if>
@@ -23,47 +20,45 @@
                 teamId=#{teamId} and
             </if>
         </trim>
-        <if test="index!=null">
+        <if
+            test="index!=null">
             order by
             ${index}
             desc
-        </if>
-        ;
-    </select>
-
-
+        </if> ; </select>
 
 
     <select id="getTeamsRank" parameterType="String" resultType="TeamRankBean">
-    SELECT t1.*,t2.*,t3.*
-    FROM
-    (SELECT teamid,
-    pointspg,RANK() OVER (ORDER BY pointspg DESC) AS pointspg_rank,
-    reboundsPG,RANK() OVER (ORDER BY reboundsPG DESC) AS reboundsPG_rank,
-    assistsPG,RANK() OVER (ORDER BY assistsPG DESC) AS assistsPG_rank,
-    stealsPG,RANK() OVER (ORDER BY stealsPG DESC) AS stealsPG_rank,
-    blocksPG,RANK() OVER (ORDER BY blocksPG DESC) AS blocksPG_rank
-    FROM nba_team
-    WHERE seasonid=#{seasonId}  AND seasontype=#{seasonType})t1,
-    (SELECT MAX(pointspg) AS pointspg_max,
-    MAX(reboundsPG) AS reboundsPG_max,
-    MAX(assistsPG) AS assistsPG_max,
-    MAX(stealsPG) AS stealsPG_max,
-    MAX(blocksPG) AS blocksPG_max
-    FROM nba_team
-    WHERE seasonid=#{seasonId}  AND seasontype=#{seasonType})t2,
-    (SELECT ROUND(AVG(pointspg),3) AS pointspg_avg,
-    ROUND(AVG(reboundsPG),3) AS reboundsPG_avg,
-    ROUND(AVG(assistsPG),3) AS assistsPG_avg,
-    ROUND(AVG(stealsPG),3) AS stealsPG_avg,
-    ROUND(AVG(blocksPG),3) AS blocksPG_avg
-    FROM nba_team
-    WHERE seasonid=#{seasonId}  AND seasontype=#{seasonType})t3
-    WHERE t1.teamid=#{teamId}
-
-    ;
+        SELECT t1.*, t2.*, t3.*, t1.recentGameScore, t1.lastTenGames, t1.nextTenGames
+        FROM
+        (SELECT teamid,
+        pointspg,RANK() OVER (ORDER BY pointspg DESC) AS pointspg_rank,
+        reboundsPG,RANK() OVER (ORDER BY reboundsPG DESC) AS reboundsPG_rank,
+        assistsPG,RANK() OVER (ORDER BY assistsPG DESC) AS assistsPG_rank,
+        stealsPG,RANK() OVER (ORDER BY stealsPG DESC) AS stealsPG_rank,
+        blocksPG,RANK() OVER (ORDER BY blocksPG DESC) AS blocksPG_rank,
+        recentGameScore,
+        lastTenGames,
+        nextTenGames
+        FROM nba_team
+        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t1,
+        (SELECT MAX(pointspg) AS pointspg_max,
+        MAX(reboundsPG) AS reboundsPG_max,
+        MAX(assistsPG) AS assistsPG_max,
+        MAX(stealsPG) AS stealsPG_max,
+        MAX(blocksPG) AS blocksPG_max
+        FROM nba_team
+        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t2,
+        (SELECT ROUND(AVG(pointspg),3) AS pointspg_avg,
+        ROUND(AVG(reboundsPG),3) AS reboundsPG_avg,
+        ROUND(AVG(assistsPG),3) AS assistsPG_avg,
+        ROUND(AVG(stealsPG),3) AS stealsPG_avg,
+        ROUND(AVG(blocksPG),3) AS blocksPG_avg
+        FROM nba_team
+        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t3
+        WHERE t1.teamid=#{teamId}
+        ;
     </select>
-
 
 
 </mapper>
