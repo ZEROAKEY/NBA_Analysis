@@ -14,7 +14,10 @@
       <el-aside :width="isCollapse ? '64px':'200px'">
         <!-- 侧边栏菜单区域 -->
         <!-- 折叠框 -->
-        <div class="toggle-button" @click="toggleClose">点击折叠</div>
+        <!-- <div class="toggle-button" @click="toggleClose">点击折叠</div> -->
+        <div class="toggle-button" @click="toggleClose">
+      <i :class="isCollapse ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+    </div>
         <el-menu
           background-color="#545c64"
           text-color="#fff"

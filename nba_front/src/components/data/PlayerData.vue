@@ -6,7 +6,6 @@
       <el-breadcrumb-item>数据统计</el-breadcrumb-item>
       <el-breadcrumb-item>球员数据</el-breadcrumb-item>
     </el-breadcrumb>
-
     <!-- 卡牌视图 -->
     <el-card>
       <div id="chooseList">

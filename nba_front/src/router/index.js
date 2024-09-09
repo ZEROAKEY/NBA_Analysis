@@ -19,6 +19,7 @@ const UserList = () => import(/* webpackChunkName: "users_rigts_roles" */ '../co
 const TeamList = () => import(/* webpackChunkName: "users_teamList" */ '../components/team/TeamList')
 const PlayerData = () => import(/* webpackChunkName: "users_playerdata_teamdata" */ '../components/data/PlayerData')
 const TeamData = () => import(/* webpackChunkName: "users_users_playerdata_teamdata" */ '../components/data/TeamData')
+const ScheduleList = () => import(/* webpackChunkName: "users_playerdata_scheduleList" */ '../components/data/ScheduleList.vue')
 
 
 // import { compile } from 'vue/types/umd'
@@ -35,6 +36,7 @@ const routes = [
                 {path: '/teamsInfo', component : TeamList},
                 {path: '/players', component : PlayerData},
                 {path: '/teams', component : TeamData},
+                {path:'/schedule',component: ScheduleList},
               
               ]
   }
