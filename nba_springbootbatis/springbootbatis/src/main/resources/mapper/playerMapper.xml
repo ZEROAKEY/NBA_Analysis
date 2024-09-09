@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.SpringBootBatis.mapper.PlayerMapper">
+    <select id="getPlayersByEachParameter" parameterType="String" resultType="PlayerBean">
+        SELECT * FROM player_info
+        <trim prefix="where" suffixOverrides="and">
+            <if test="name!=null">
+                (cnname like "%"#{name}"%"
+                or enname like "%"#{name}"%") and
+            </if>
+            <if test="teamId!=null">
+                teamid=#{teamId} and
+            </if>
+            <if test="teamName!=null">
+                teamname like "%"#{teamName}"%" and
+            </if>
+        </trim>
+        ;
+    </select>
+
+
+</mapper>
