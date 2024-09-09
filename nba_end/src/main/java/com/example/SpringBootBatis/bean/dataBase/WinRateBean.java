@@ -7,8 +7,6 @@ public class WinRateBean {
     private String wid;
     private String VisitTeam;
     private String VWinRate;
-    private String VScore;
     private String HomeTeam;
     private String HWinRate;
-    private String HScore;
 }
