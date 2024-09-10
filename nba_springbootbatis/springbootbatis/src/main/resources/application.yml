@@ -1,22 +1,19 @@
 spring:
   datasource:
-#    user:
-#      url: jdbc:mysql://localhost:3306/springboottest?useSSL=false&serverTimezone=Asia/Shanghai
-#      username: root
-#      password: 123456
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-#    nba:
-      url: jdbc:mysql://localhost:3306/nba_total?useSSL=false&serverTimezone=Asia/Shanghai
-      username: root
-      password: 123456
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:sqlite:nba_spider/nba_total.db
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    hibernate:
+      ddl-auto: none  # 不自动修改数据库结构
+    show-sql: true  # 打印SQL语句到控制台
+
 mybatis:
-#  user:
-#    mapper-locations: classpath:mapper/user/*.xml
-#    type-aliases-package: com.example.SpringBootBatis.bean
-#  nba:
-    mapper-locations: classpath:mapper/*.xml
-    type-aliases-package: com.example.SpringBootBatis.bean
+  #  user:
+  #    mapper-locations: classpath:mapper/user/*.xml
+  #    type-aliases-package: com.example.SpringBootBatis.bean
+  #  nba:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.SpringBootBatis.bean
 #  ↑可以在mapper.xml中不用写全bean名称
 server:
   port: 8888

@@ -119,7 +119,7 @@ public class LoginController {
         tmp3.add(menuData202);
         MenuData menuData203=new MenuData("203", "球队数据", "teams",empty);
         tmp3.add(menuData203);
-        MenuData menuData204=new MenuData("204", "胜率预测", "winrate",empty);
+        MenuData menuData204=new MenuData("204", "比赛日程", "schedule",empty);
         tmp3.add(menuData204);
         MenuData menuData102=new MenuData("102", "数据统计", "teams",tmp3);
         list.add(menuData102);

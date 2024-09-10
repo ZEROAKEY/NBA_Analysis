@@ -7,7 +7,7 @@
     <!-- 获取最近10场比赛信息 -->
     <select id="getLastTenGameInformation" resultType="com.example.SpringBootBatis.bean.dataBase.TenGameBean">
     SELECT date, leftName, leftGoal, rightName, rightGoal
-    FROM nbaSchedule
+    FROM nba_schedule
     WHERE leftGoal != 0 AND rightGoal != 0
       AND leftName IS NOT NULL AND rightName IS NOT NULL
       AND leftName != '中国男篮' AND rightName != '中国男篮'
@@ -18,7 +18,7 @@
     <!-- 获取接下来10场比赛信息 -->
     <select id="getNextTenGameInformation" resultType="com.example.SpringBootBatis.bean.dataBase.TenGameBean">
     SELECT date, leftName, leftGoal, rightName, rightGoal
-    FROM nbaSchedule
+    FROM nba_schedule
     WHERE leftGoal = 0 AND rightGoal = 0
       AND leftName IS NOT NULL AND rightName IS NOT NULL
       AND leftName != '中国男篮' AND rightName != '中国男篮'
