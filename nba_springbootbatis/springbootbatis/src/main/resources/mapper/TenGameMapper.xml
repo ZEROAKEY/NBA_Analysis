@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.SpringBootBatis.mapper.TenGameMapper">
+  
+    <!-- 获取最近10场比赛信息 -->
+    <select id="getLastTenGameInformation" resultType="com.example.SpringBootBatis.bean.dataBase.TenGameBean">
+    SELECT date, leftName, leftGoal, rightName, rightGoal
+    FROM nbaSchedule
+    WHERE leftGoal != 0 AND rightGoal != 0
+      AND leftName IS NOT NULL AND rightName IS NOT NULL
+      AND leftName != '中国男篮' AND rightName != '中国男篮'
+    ORDER BY date DESC
+    LIMIT 10
+    </select>
+
+    <!-- 获取接下来10场比赛信息 -->
+    <select id="getNextTenGameInformation" resultType="com.example.SpringBootBatis.bean.dataBase.TenGameBean">
+    SELECT date, leftName, leftGoal, rightName, rightGoal
+    FROM nbaSchedule
+    WHERE leftGoal = 0 AND rightGoal = 0
+      AND leftName IS NOT NULL AND rightName IS NOT NULL
+      AND leftName != '中国男篮' AND rightName != '中国男篮'
+    ORDER BY date ASC
+    LIMIT 10
+    </select>
+
+</mapper>
