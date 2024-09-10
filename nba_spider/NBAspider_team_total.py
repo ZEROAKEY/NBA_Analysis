@@ -42,10 +42,10 @@ def get_html(url, year, conn):
             print(df)
 
             # 保存到 CSV 文件
-            df.to_csv(f'NBA_{year}_per_game_stats.csv', index=False)
+            df.to_csv(f'NBA_{year}_teams_stats.csv', index=False)
 
             # 保存到 SQLite 数据库中
-            df.to_sql('nba_per_game_stats', conn, if_exists='append', index=False)
+            df.to_sql('nba_teams_stats', conn, if_exists='append', index=False)
 
         else:
             print(f'没有找到 {year} 年的 Per Game Stats 表格')
@@ -54,7 +54,7 @@ def get_html(url, year, conn):
 
 
 # 创建 SQLite 数据库连接
-conn = sqlite3.connect('nba_stats.db')
+conn = sqlite3.connect('nba_total.db')
 
 # 爬取多个年份的数据并保存到数据库
 year_list = [2020, 2021, 2022, 2023, 2024]

@@ -35,12 +35,12 @@ def deal_store_data():
         data = json.load(file)
 
     # 连接到 SQLite 数据库
-    conn = sqlite3.connect('nba_schedule.db')
+    conn = sqlite3.connect('nba_total.db')
     cursor = conn.cursor()
 
     # 创建表（如果尚未创建）
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS nbaSchedule (
+    CREATE TABLE IF NOT EXISTS nba_schedule (
         date TEXT,
         matchType TEXT,
         leftName TEXT,
@@ -64,7 +64,7 @@ def deal_store_data():
             rightGoal = match.get('rightGoal')
             # 插入数据到数据库
             cursor.execute('''
-            INSERT INTO nbaSchedule (date, matchType, leftName, leftBadge, leftGoal, rightName, rightBadge, rightGoal)
+            INSERT INTO nba_schedule (date, matchType, leftName, leftBadge, leftGoal, rightName, rightBadge, rightGoal)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (date, matchType, leftName, leftBadge, leftGoal, rightName, rightBadge, rightGoal))
 

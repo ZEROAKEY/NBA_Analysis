@@ -7,7 +7,6 @@ import time
 import random
 
 def getTeamUrl(teamArr):
-    # 先爬取各个队伍的网页对应连接
     # 设置请求头
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -25,9 +24,6 @@ def getTeamUrl(teamArr):
 
         # 找到Active Franchises表格
         table = soup.find('table', {'id': 'teams_active'})
-
-        # 初始化teamArr列表
-        
 
         # 提取表中的队伍链接
         if table:
@@ -47,8 +43,10 @@ def getTeamUrl(teamArr):
         print(f'请求失败，状态码: {response.status_code}')
 
 
-# 目标网址
-def getTeamInfo(team):
+def getTeamInfo(team, cursor, conn):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
     url = f'https://www.basketball-reference.com{team}players.html'
 
     # 随机延迟避免触发反爬虫机制
@@ -56,22 +54,6 @@ def getTeamInfo(team):
 
     # 发送GET请求
     response = requests.get(url, headers=headers)
-
-    # 创建 SQLite 数据库连接
-    conn = sqlite3.connect('nba_team_info.db')
-    cursor = conn.cursor()
-
-    # 创建存储球队信息的表
-    cursor.execute('''CREATE TABLE IF NOT EXISTS team_info (
-                        Name TEXT,
-                        Location TEXT,
-                        Team_Names TEXT,
-                        Seasons TEXT,
-                        Record TEXT,
-                        Playoff_Appearances INTEGER,
-                        Championships INTEGER,
-                        Logo TEXT
-                     )''')
 
     # 检查请求是否成功
     if response.status_code == 200:
@@ -119,7 +101,7 @@ def getTeamInfo(team):
                            (team_data["Name"], team_data["Location"], team_data["Team Names"], team_data["Seasons"],
                             team_data["Record"], team_data["Playoff Appearances"], team_data["Championships"],
                             team_data["Logo"]))
-            conn.commit()
+
         else:
             print("没有找到球队简介")
 
@@ -166,18 +148,14 @@ def getTeamInfo(team):
             # 删除只有 'Rk' 列有数据的行，即除了 'Rk' 列外，其他列均为空的行
             df = df.dropna(subset=headers[1:], how='all')
 
-            # 添加一列 'TeamName'，值为 'Atlanta Hawks'
-            df['TeamName'] = team_data['Name']
+            # 添加一列 'TeamName'
+            df['TeamName'] = team_name
 
-            # 显示数据表
-            print("\n球员信息:")
-            print(df)
-
-            # 保存到 CSV 文件
-            df.to_csv('ATL_players_info.csv', index=False)
-
+            print(f"球员信息 DataFrame ({team_name}):\n", df)
+            # 保存到csv
+            df.to_csv(f'NBA_{team_name}_players_info.csv', index=False)
             # 保存到 SQLite 数据库中
-            df.to_sql('atl_players_info', conn, if_exists='replace', index=False)
+            df.to_sql('players_info', conn, if_exists='append', index=False)
 
         else:
             print("没有找到球员信息表格")
@@ -185,10 +163,31 @@ def getTeamInfo(team):
     else:
         print(f'请求失败，状态码: {response.status_code}')
 
-    # 关闭数据库连接
-    conn.close()
 
+# 主流程
 teamArr = []
 getTeamUrl(teamArr)
+
+# 创建 SQLite 数据库连接（在循环外部）
+conn = sqlite3.connect('nba_total.db')
+cursor = conn.cursor()
+
+# 创建存储球队信息的表（在循环外部，只需创建一次）
+cursor.execute('''CREATE TABLE IF NOT EXISTS team_info (
+                    Name TEXT,
+                    Location TEXT,
+                    Team_Names TEXT,
+                    Seasons TEXT,
+                    Record TEXT,
+                    Playoff_Appearances INTEGER,
+                    Championships INTEGER,
+                    Logo TEXT
+                 )''')
+
+# 循环获取每个队伍的信息
 for team in teamArr:
-    getTeamInfo(team)
+    getTeamInfo(team, cursor, conn)
+
+# 提交更改并关闭数据库连接（在循环结束后关闭）
+conn.commit()
+conn.close()
