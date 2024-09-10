@@ -25,11 +25,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(game, index) in games" :key="index">
-                <td>{{ game.time }}</td>
-                <td>{{ game.awayTeam }}</td>
-                <td>{{ game.score }}</td>
-                <td>{{ game.homeTeam }}</td>
+              <tr v-for="(game, index) in pastGames" :key="index">
+                <td>{{ game.date }}</td>
+                <td>{{ game.leftName }}</td>
+                <td>{{ game.leftGoal + '-' + game.rightGoal  }}</td>
+                <td>{{ game.rightName }}</td>
               </tr>
             </tbody>
           </table>
@@ -50,11 +50,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(game, index) in games" :key="index">
-                <td>{{ game.time }}</td>
-                <td>{{ game.awayTeam }}</td>
-                <td>{{ game.score }}</td>
-                <td>{{ game.homeTeam }}</td>
+              <tr v-for="(game, index) in next" :key="index">
+                <td>{{ game.date }}</td>
+                <td>{{ game.leftName }}</td>
+                <td>{{ game.leftGoal + '-' + game.rightGoal  }}</td>
+                <td>{{ game.rightName }}</td>
               </tr>
             </tbody>
           </table>
@@ -71,42 +71,28 @@ export default {
   },
   data() {
     return {
-      games: [
-        {
-          time: '18:00',
-          status: '已结束',
-          awayTeam: '马刺',
-          score: '66',
-          homeTeam: '热火',
-        },
-        {
-          time: '20:00',
-          status: '进行中',
-          awayTeam: '快船',
-          score: '',
-          homeTeam: '威少',
-        },
-        {
-          time: '22:00',
-          status: '未开始',
-          awayTeam: '小卡',
-          score: '',
-          homeTeam: '快船七人上双',
-        }
-      ]
+      pastGames:[],
+      nextGames:[]
     }
   },
   methods: {
     //获取比赛日程列表
     async getGameScheduleList() {
-      const { data: res } = await this.$http.get("winrate", {
-        params: this.queryinfoP,
-      });
+
+      const { data: res } = await this.$http.get("search/last10");
       if (res.meta.status !== 200) {
-        return this.$message.error("获取比赛日程表失败");
+        return this.$message.error("获取过去十场比赛日程表失败");
       } else {
-        this.psstGames = res.data.pageData;
-        this.$message.success("获取比赛日程列表成功");
+        this.pastGames = res.data;
+        this.$message.success("获取过去十场比赛日程列表成功");
+      }
+
+      const { data: res_next } = await this.$http.get("search/next10");
+      if (res_next.meta.status !== 200) {
+        return this.$message.error("获取未来十场比赛日程表失败");
+      } else {
+        this.nextGames = res_next.data;
+        this.$message.success("获取未来十场比赛日程列表成功");
       }
     },
   }
