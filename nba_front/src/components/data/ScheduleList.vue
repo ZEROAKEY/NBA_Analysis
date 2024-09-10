@@ -28,7 +28,7 @@
               <tr v-for="(game, index) in pastGames" :key="index">
                 <td>{{ game.date }}</td>
                 <td>{{ game.leftName }}</td>
-                <td>{{ game.leftGoal + '-' + game.rightGoal  }}</td>
+                <td>{{ game.leftGoal + ' - ' + game.rightGoal  }}</td>
                 <td>{{ game.rightName }}</td>
               </tr>
             </tbody>
@@ -50,10 +50,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(game, index) in next" :key="index">
+              <tr v-for="(game, index) in nextGames" :key="index">
                 <td>{{ game.date }}</td>
                 <td>{{ game.leftName }}</td>
-                <td>{{ game.leftGoal + '-' + game.rightGoal  }}</td>
+                <td>{{ game.leftGoal + ' - ' + game.rightGoal  }}</td>
                 <td>{{ game.rightName }}</td>
               </tr>
             </tbody>
@@ -115,6 +115,7 @@ table {
 
 th,
 td {
+  width: 25%;
   padding: 12px 15px;
   text-align: center;
 }
