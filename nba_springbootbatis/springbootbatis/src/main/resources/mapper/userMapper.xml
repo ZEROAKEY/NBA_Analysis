@@ -76,10 +76,12 @@
         SELECT * FROM user
         <trim prefix="where" suffixOverrides="and">
             <if test="username!=null">
-                username like "%"#{username}"%"
+                username LIKE '%' || #{username} || '%'
             </if>
         </trim>
     </select>
+
+
 
     <select id="queryUserByName" parameterType="String" resultType="UserBean">
         SELECT * FROM user
