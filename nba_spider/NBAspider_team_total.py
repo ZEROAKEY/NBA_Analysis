@@ -37,6 +37,9 @@ def get_html(url, year, conn):
             df = pd.DataFrame(rows, columns=headers)
             df['Year'] = year  # 添加年份列
 
+            # 去掉队名Team中的*号
+            df['Team'] = df['Team'].str.rstrip('*')
+
             # 显示数据表
             print(f"爬取 {year} 年数据成功!")
             print(df)
