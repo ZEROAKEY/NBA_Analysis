@@ -49,9 +49,9 @@
                 s.season_year = #{season_year} AND
             </if>
             <if test="position != null and position != ''">
-                (p.position LIKE '%' || #{position} || '%'
+                (s.position LIKE '%' || #{position} || '%'
                 <if test="position != '后卫'">
-                    OR p.position = '锋卫摇摆人'
+                    OR s.position = '锋卫摇摆人'
                 </if>) AND
             </if>
             <if test="player_name != null and player_name != ''">
