@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.SpringBootBatis.mapper.SeasonSelectionMapper">
+
+    <!-- 获取去重的赛季年份数据 -->
+    <select id="getSeason" resultType="java.lang.Integer">
+        SELECT DISTINCT season_year
+        FROM nba_players_stats
+        ORDER BY season_year DESC
+    </select>
+
+</mapper>

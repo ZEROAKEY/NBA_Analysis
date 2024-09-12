@@ -49,19 +49,19 @@
                 s.season_year = #{season_year} AND
             </if>
             <if test="position != null and position != ''">
-                (p.position LIKE CONCAT('%', #{position}, '%')
+                (p.position LIKE '%' || #{position} || '%'
                 <if test="position != '后卫'">
                     OR p.position = '锋卫摇摆人'
                 </if>) AND
             </if>
             <if test="player_name != null and player_name != ''">
-                (p.player_name LIKE CONCAT('%', #{player_name}, '%')) AND
+                (p.player_name LIKE '%' || #{player_name} || '%') AND
             </if>
             <if test="team_id != null and team_id != ''">
                 s.team_id = #{team_id} AND
             </if>
             <if test="team_name != null and team_name != ''">
-                s.team_name LIKE CONCAT('%', #{team_name}, '%') AND
+                s.team_name LIKE '%' || #{team_name} || '%' AND
             </if>
         </trim>
 

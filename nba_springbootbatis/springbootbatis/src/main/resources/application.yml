@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlite:../nba_spider/nba_total.db
+    url: jdbc:sqlite:nba_spider/nba_total.db
     driver-class-name: org.sqlite.JDBC
   jpa:
     hibernate:
@@ -20,7 +20,6 @@ server:
 #config:
 #    jwt:
 #      # 加密密钥
-#      secret: abcdefg1234567
 #      # token有效时长
 #      expire: 3600
 #      # header 名称
