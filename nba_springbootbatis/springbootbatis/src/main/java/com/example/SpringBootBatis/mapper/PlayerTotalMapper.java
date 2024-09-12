@@ -20,5 +20,5 @@ public interface PlayerTotalMapper {
      */
     List<PlayerTotalBean> getPlayerTotalsByEachParameterAndSortByIndex(Integer team_id, String team_name,
                                                                        String position, String player_name,
-                                                                       Integer season_year, Integer index);
+                                                                       Integer season_year, String index);
 }

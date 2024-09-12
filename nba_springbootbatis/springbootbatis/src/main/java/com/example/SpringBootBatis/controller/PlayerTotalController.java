@@ -22,7 +22,7 @@ public class PlayerTotalController {
     // 获取球员总数据，并根据特定字段排序，查询中包含 Year 字段
     @GetMapping("/PlayerTotal")
     public ResponseResult getPlayerTotalsAndSortByIndex(@RequestParam(required = false, value = "season_year") Integer season_year,
-                                                        @RequestParam(required = false, value = "index") Integer index,
+                                                        @RequestParam(required = false, value = "index") String index,
                                                         @RequestParam(required = false, value = "position") String position,
                                                         @RequestParam(required = false, value = "pageNum", defaultValue = "1") int pageNum,
                                                         @RequestParam(required = false, value = "pageSize", defaultValue = "10") int pageSize,

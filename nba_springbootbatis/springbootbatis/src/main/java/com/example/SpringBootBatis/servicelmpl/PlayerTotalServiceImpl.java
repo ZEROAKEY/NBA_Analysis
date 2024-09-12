@@ -31,7 +31,7 @@ public class PlayerTotalServiceImpl implements PlayerTotalService {
     @Override
     public List<PlayerTotalBean> getPlayerTotalsByEachParameterAndSortByIndex(Integer team_id, String team_name,
                                                                               String position, String player_name,
-                                                                              Integer season_year, Integer index) {
+                                                                              Integer season_year, String index) {
         // 通过 PlayerTotalMapper 查询符合条件的数据
         return playerTotalMapper.getPlayerTotalsByEachParameterAndSortByIndex(team_id, team_name, position, player_name, season_year, index);
     }
