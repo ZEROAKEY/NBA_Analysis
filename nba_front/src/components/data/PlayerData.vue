@@ -154,6 +154,8 @@
 export default {
   created() {
     //获取所有的权限
+    this.getSeasonList();
+    this.getPositionList();
     this.getPlayerDataList();
   },
   data() {
@@ -174,28 +176,7 @@ export default {
       valueY: [2020],
       valueM: [1],
       valueP: [],
-      optionsY: [
-        {
-          value: 2020,
-          label: "2019-2020赛季",
-        },
-        {
-          value: 2021,
-          label: "2020-2021赛季",
-        },
-        {
-          value: 2022,
-          label: "2021-2022赛季",
-        },
-        {
-          value: 2023,
-          label: "2022-2023赛季",
-        },
-        {
-          value: 2024,
-          label: "2023-2024赛季",
-        },
-      ],
+      optionsY: [],
       optionsM: [
         {
           value: 0,
@@ -210,23 +191,41 @@ export default {
           label: "季后赛",
         },
       ],
-      optionsP: [
-        {
-          value: "前锋",
-          label: "前锋",
-        },
-        {
-          value: "中锋",
-          label: "中锋",
-        },
-        {
-          value: "后卫",
-          label: "后卫",
-        },
-      ],
+      optionsP: [],
     };
   },
   methods: {
+    //获取赛季查询列表
+    async getSeasonList() {
+      const { data: res } = await this.$http.get("search/season", {
+      });
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取赛季列表失败");
+      } else {
+        for(let i =0; i< res.data.length;i++){
+          this.optionsY.push({
+            value: res.data[i],
+            label: res.data[i]-1 +'-'+res.data[i]+'赛季'
+          })
+        }
+      }
+    },
+    //获取位置列表
+    async getPositionList() {
+      const { data: res } = await this.$http.get("search/position", {
+      });
+      if (res.meta.status !== 200) {
+        return this.$message.error("获取位置列表失败");
+      } else {
+        for(let i =0; i< res.data.length;i++){
+          this.optionsP.push({
+            value: res.data[i]['position'],
+            label: res.data[i]['position']
+          })
+
+        }
+      }
+    },
     //获取球员成绩列表
     async getPlayerDataList() {
       const { data: res } = await this.$http.get("search/PlayerTotal", {
