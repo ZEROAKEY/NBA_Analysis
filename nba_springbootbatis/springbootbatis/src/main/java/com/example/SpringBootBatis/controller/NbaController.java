@@ -14,28 +14,50 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/search")
-public class NbaController {@Autowired(required = false)
-private NbaService nbaService;
+public class NbaController {
+
+    @Autowired(required = false)
+    private NbaService nbaService;
+
+    /**
+     * 根据条件获取球队并按指定字段排序
+     *
+     * @param season_year 赛季年份
+     * @param pageNum     当前页码
+     * @param team_name   球队名称
+     * @param pageSize    每页显示条数
+     * @param index       排序字段
+     * @param team_id     球队ID
+     * @return 带分页的查询结果
+     */
     @GetMapping("/team")
-    public ResponseResult getTeamsSortByIndex(@RequestParam(required = false,value = "seasonId") String seasonId,
-                                              @RequestParam(required = false,value = "seasonType") String seasonType,
-                                              @RequestParam(required = false,value = "pageNum") String pageNum,
-                                              @RequestParam(required = false,value = "name") String name,
-                                              @RequestParam(required = false,value = "conference") String conference,
-                                              @RequestParam(required = false,value = "pageSize") String pageSize,
-                                              @RequestParam(required = false,value = "index") String index,
-                                              @RequestParam(required = false,value = "teamId") String teamId) throws Exception {
-        List<TeamBean> teamBeans=nbaService.getTeamsSortByIndex(index,seasonId,seasonType,name,conference,teamId);
-        return ResultUtil.querySuccessPage(teamBeans,Integer.parseInt(pageNum),Integer.parseInt(pageSize));
+    public ResponseResult getTeamsSortByIndex(@RequestParam(required = false, value = "season_year") String season_year,
+                                              @RequestParam(required = false, value = "pageNum", defaultValue = "1") String pageNum,
+                                              @RequestParam(required = false, value = "team_name") String team_name,
+                                              @RequestParam(required = false, value = "pageSize", defaultValue = "10") String pageSize,
+                                              @RequestParam(required = false, value = "index") String index,
+                                              @RequestParam(required = false, value = "team_id") String team_id) throws Exception {
+
+        // 获取排序后的球队数据
+        List<TeamBean> teamBeans = nbaService.getTeamsSortByIndex(index, season_year, team_name, team_id);
+
+        return ResultUtil.querySuccessPage(teamBeans, Integer.parseInt(pageNum), Integer.parseInt(pageSize));
     }
 
-
+    /**
+     * 获取球队排名信息
+     *
+     * @param season_year 赛季年份
+     * @param team_id     球队ID
+     * @return 查询结果
+     */
     @GetMapping("/teamRank")
-    public ResponseResult getTeamsRank(@RequestParam(required = false,value = "seasonId") String seasonId,
-                                       @RequestParam(required = false,value = "seasonType") String seasonType,
-                                       @RequestParam(required = false,value = "teamId") String teamId) throws Exception {
-        List<TeamBean> teamBeans=nbaService.getTeamsRank(seasonId,seasonType,teamId);
+    public ResponseResult getTeamsRank(@RequestParam(required = false, value = "season_year") String season_year,
+                                       @RequestParam(required = false, value = "team_id") String team_id) throws Exception {
+
+        // 获取球队排名数据
+        List<TeamBean> teamBeans = nbaService.getTeamsRank(season_year, team_id);
+
         return ResultUtil.querySuccessFull(teamBeans);
     }
-
 }

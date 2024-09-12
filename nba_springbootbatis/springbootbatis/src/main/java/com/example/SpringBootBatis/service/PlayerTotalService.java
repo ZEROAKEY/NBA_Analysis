@@ -1,37 +1,27 @@
 package com.example.SpringBootBatis.service;
 
 import com.example.SpringBootBatis.bean.dataBase.PlayerTotalBean;
-import com.example.SpringBootBatis.bean.dataBase.UserBean;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
- * 对于controller的操作，与mapper一一对应
- *  * id：账户编号
- *  * username：账户名
- *  * password：密码
- *  * rid：角色类型
- *  * mobile：手机号
+ * PlayerTotalService 与 controller、mapper 一一对应
  */
 @Service
 public interface PlayerTotalService {
 
     /**
+     * 根据给定参数查询并按指定列排序的球员总数据信息
      *
-     * @param teamId 队伍ID
-     * @param teamName 队伍名
-     * @param position 位置
-     * @param name 姓名
-     * @param index 按某一列排序
-     * @param seasonId 几几年
-     * @param seasonType 那个赛季
-     * @return
+     * @param team_id   队伍ID
+     * @param team_name 队伍名
+     * @param position 球员位置
+     * @param player_name     球员姓名
+     * @param index    排序字段
+     * @param season_year     赛季年份
+     * @return 符合条件的球员数据列表
      */
-    List<PlayerTotalBean> getPlayerTotalsByEachParameterAndSortByIndex(String teamId,String teamName,
-                                                                       String position,
-                                                                       String name,
-                                                                       String index,
-                                                                       String seasonId,String seasonType);
-
+    List<PlayerTotalBean> getPlayerTotalsByEachParameterAndSortByIndex(Integer team_id, String team_name,
+                                                                       String position, String player_name,
+                                                                       Integer season_year, Integer index);
 }

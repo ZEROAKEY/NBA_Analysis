@@ -3,22 +3,60 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.SpringBootBatis.mapper.PlayerMapper">
-    <select id="getPlayersByEachParameter" parameterType="String" resultType="PlayerBean">
-        SELECT * FROM player_info
-        <trim prefix="where" suffixOverrides="and">
-            <if test="name!=null">
-                (cnname like "%"#{name}"%"
-                or enname like "%"#{name}"%") and
+
+    <!-- Result map for PlayerBean -->
+    <resultMap id="PlayerResultMap" type="com.example.SpringBootBatis.bean.dataBase.PlayerBean">
+        <result property="rank" column="rank"/>
+        <result property="player_name" column="player_name"/>
+        <result property="career_start_year" column="career_start_year"/>
+        <result property="career_end_year" column="career_end_year"/>
+        <result property="years_played" column="years_played"/>
+        <result property="games_played" column="games_played"/>
+        <result property="minutes_played" column="minutes_played"/>
+        <result property="field_goals" column="field_goals"/>
+        <result property="field_goals_attempted" column="field_goals_attempted"/>
+        <result property="three_pointers" column="three_pointers"/>
+        <result property="three_pointers_attempted" column="three_pointers_attempted"/>
+        <result property="free_throws" column="free_throws"/>
+        <result property="free_throws_attempted" column="free_throws_attempted"/>
+        <result property="offensive_rebounds" column="offensive_rebounds"/>
+        <result property="total_rebounds" column="total_rebounds"/>
+        <result property="assists" column="assists"/>
+        <result property="steals" column="steals"/>
+        <result property="blocks" column="blocks"/>
+        <result property="turnovers" column="turnovers"/>
+        <result property="personal_fouls" column="personal_fouls"/>
+        <result property="points" column="points"/>
+        <result property="field_goal_percentage" column="field_goal_percentage"/>
+        <result property="three_pointer_percentage" column="three_pointer_percentage"/>
+        <result property="free_throw_percentage" column="free_throw_percentage"/>
+        <result property="minutes_per_game" column="minutes_per_game"/>
+        <result property="points_per_game" column="points_per_game"/>
+        <result property="rebounds_per_game" column="rebounds_per_game"/>
+        <result property="assists_per_game" column="assists_per_game"/>
+        <result property="steals_per_game" column="steals_per_game"/>
+        <result property="blocks_per_game" column="blocks_per_game"/>
+        <result property="team_name" column="team_name"/>
+        <result property="team_id" column="team_id"/>
+    </resultMap>
+
+    <!-- 查询语句 -->
+    <select id="getPlayersByEachParameter" parameterType="map" resultMap="PlayerResultMap">
+        SELECT * FROM players_info
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <!-- 模糊匹配球员名字 -->
+            <if test="player_name != null and player_name != ''">
+                player_name LIKE '%' || #{player_name} || '%' AND
             </if>
-            <if test="teamId!=null">
-                teamid=#{teamId} and
+            <!-- 通过 team_id 查询 -->
+            <if test="team_id != null and team_id != ''">
+                team_id = #{team_id} AND
             </if>
-            <if test="teamName!=null">
-                teamname like "%"#{teamName}"%" and
+            <!-- 模糊匹配 team_name -->
+            <if test="team_name != null and team_name != ''">
+                team_name LIKE '%' || #{team_name} || '%' AND
             </if>
         </trim>
-        ;
     </select>
-
 
 </mapper>

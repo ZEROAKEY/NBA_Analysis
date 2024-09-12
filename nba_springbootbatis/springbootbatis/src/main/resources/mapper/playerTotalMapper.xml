@@ -3,37 +3,72 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.SpringBootBatis.mapper.PlayerTotalMapper">
-    <select id="getPlayerTotalsByEachParameterAndSortByIndex" parameterType="String" resultType="PlayerTotalBean">
-        SELECT * FROM nba_total
-        <trim prefix="where" suffixOverrides="and">
-            <if test="seasonId!=null">
-                seasonid=#{seasonId} and
+
+    <!-- ResultMap 用于映射数据库字段到 PlayerTotalBean -->
+    <resultMap id="PlayerTotalResultMap" type="com.example.SpringBootBatis.bean.dataBase.PlayerTotalBean">
+        <result property="player_name" column="player_name"/>
+        <result property="position" column="position"/>
+        <result property="age" column="age"/>
+        <result property="team" column="team"/>
+        <result property="games_played" column="games_played"/>
+        <result property="games_started" column="games_started"/>
+        <result property="minutes_played" column="minutes_played"/>
+        <result property="field_goals" column="field_goals"/>
+        <result property="field_goals_attempted" column="field_goals_attempted"/>
+        <result property="field_goal_pct" column="field_goal_pct"/>
+        <result property="three_pointer" column="three_pointer"/>
+        <result property="three_pointer_attempted" column="three_pointer_attempted"/>
+        <result property="three_pointer_pct" column="three_pointer_pct"/>
+        <result property="two_pointer" column="two_pointer"/>
+        <result property="two_pointer_attempted" column="two_pointer_attempted"/>
+        <result property="two_pointer_pct" column="two_pointer_pct"/>
+        <result property="effective_field_goal_pct" column="effective_field_goal_pct"/>
+        <result property="free_throws" column="free_throws"/>
+        <result property="free_throws_attempted" column="free_throws_attempted"/>
+        <result property="free_throw_pct" column="free_throw_pct"/>
+        <result property="offensive_rebounds" column="offensive_rebounds"/>
+        <result property="defensive_rebounds" column="defensive_rebounds"/>
+        <result property="total_rebounds" column="total_rebounds"/>
+        <result property="assists" column="assists"/>
+        <result property="steals" column="steals"/>
+        <result property="blocks" column="blocks"/>
+        <result property="turnovers" column="turnovers"/>
+        <result property="personal_fouls" column="personal_fouls"/>
+        <result property="points" column="points"/>
+        <result property="team_name" column="team_name"/>
+        <result property="team_id" column="team_id"/>
+        <result property="season_year" column="season_year"/>
+    </resultMap>
+
+    <!-- 联合查询的SQL，使用 resultMap -->
+    <select id="getPlayerTotalsByEachParameterAndSortByIndex" parameterType="map" resultMap="PlayerTotalResultMap">
+        SELECT * FROM players_info p
+        JOIN nba_players_stats s ON p.player_name = s.player_name
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="season_year != null">
+                s.season_year = #{season_year} AND
             </if>
-            <if test="seasonType!=null">
-                seasontype=#{seasonType} and
+            <if test="position != null and position != ''">
+                (p.position LIKE CONCAT('%', #{position}, '%')
+                <if test="position != '后卫'">
+                    OR p.position = '锋卫摇摆人'
+                </if>) AND
             </if>
-            <if test="position!=null">
-                (position like "%"#{position}"%"
-                <if test="position!='后卫'">
-                    or position ='锋卫摇摆人'
-                </if>)
-                and
+            <if test="player_name != null and player_name != ''">
+                (p.player_name LIKE CONCAT('%', #{player_name}, '%')) AND
             </if>
-            <if test="name!=null">
-                (cnname like "%"#{name}"%"
-                or enname like "%"#{name}"%") and
+            <if test="team_id != null and team_id != ''">
+                s.team_id = #{team_id} AND
             </if>
-            <if test="teamId!=null">
-                teamid=#{teamId} and
-            </if>
-            <if test="teamName!=null">
-                teamname like "%"#{teamName}"%" and
+            <if test="team_name != null and team_name != ''">
+                s.team_name LIKE CONCAT('%', #{team_name}, '%') AND
             </if>
         </trim>
-        <if test="index!=null">
-        order by ${index} desc
+
+        <!-- 动态排序 -->
+        <if test="index != null and index != ''">
+            ORDER BY ${index} DESC
         </if>
-        ;
     </select>
 
 </mapper>

@@ -22,7 +22,7 @@
     WHERE leftGoal = 0 AND rightGoal = 0
       AND leftName !=''AND rightName !=''
       AND leftName != '中国男篮' AND rightName != '中国男篮'
-    ORDER BY date ASC
+    ORDER BY date
     LIMIT 10
     </select>
 

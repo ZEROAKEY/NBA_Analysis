@@ -2,60 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.SpringBootBatis.mapper.NbaMapper">
 
-    <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean"> SELECT *
-     FROM nba_team <trim prefix="where" suffixOverrides="and">
-            <if test="seasonId!=null">
-                seasonid=#{seasonId} and
+    <!-- 获取球队信息并按指定字段排序 -->
+    <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean">
+        SELECT ts.*, ti.*
+        FROM nba_teams_stats ts
+        JOIN team_info ti ON ts.team_id = ti.team_id
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="season_year != null">
+                ts.season_year = #{season_year} AND
             </if>
-            <if test="name!=null">
-                fullcnname like "%"#{name}"%" and
+            <if test="team_name != null">
+                ti.team_name LIKE "%" || #{team_name} || "%" AND
             </if>
-            <if test="seasonType!=null">
-                seasontype=#{seasonType} and
-            </if>
-            <if test="conference!=null">
-                conference=#{conference} and
-            </if>
-            <if test="teamId!=null">
-                teamId=#{teamId} and
+            <if test="team_id != null">
+                ts.team_id = #{team_id} AND
             </if>
         </trim>
-        <if
-            test="index!=null">
-            order by
-            ${index}
-            desc
-        </if> ; </select>
+        <if test="index != null">
+            ORDER BY ${index} DESC
+        </if>
+    </select>
 
-
+    <!-- 获取球队排名信息 -->
     <select id="getTeamsRank" parameterType="String" resultType="TeamRankBean">
         SELECT t1.*, t2.*, t3.*
         FROM
-        (SELECT teamid,
-        pointspg,RANK() OVER (ORDER BY pointspg DESC) AS pointspg_rank,
-        reboundsPG,RANK() OVER (ORDER BY reboundsPG DESC) AS reboundsPG_rank,
-        assistsPG,RANK() OVER (ORDER BY assistsPG DESC) AS assistsPG_rank,
-        stealsPG,RANK() OVER (ORDER BY stealsPG DESC) AS stealsPG_rank,
-        blocksPG,RANK() OVER (ORDER BY blocksPG DESC) AS blocksPG_rank
-        
-        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t1,
-        (SELECT MAX(pointspg) AS pointspg_max,
-        MAX(reboundsPG) AS reboundsPG_max,
-        MAX(assistsPG) AS assistsPG_max,
-        MAX(stealsPG) AS stealsPG_max,
-        MAX(blocksPG) AS blocksPG_max
-        FROM nba_team
-        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t2,
-        (SELECT ROUND(AVG(pointspg),3) AS pointspg_avg,
-        ROUND(AVG(reboundsPG),3) AS reboundsPG_avg,
-        ROUND(AVG(assistsPG),3) AS assistsPG_avg,
-        ROUND(AVG(stealsPG),3) AS stealsPG_avg,
-        ROUND(AVG(blocksPG),3) AS blocksPG_avg
-        FROM nba_team
-        WHERE seasonid=#{seasonId} AND seasontype=#{seasonType})t3
-        WHERE t1.teamid=#{teamId}
-        ;
+            (SELECT ts.team_id,
+                    ts.points AS points_per_game, RANK() OVER (ORDER BY ts.points DESC) AS points_per_game_rank,
+                    (ts.total_rebounds / ts.games_played) AS rebounds_per_game,
+                    RANK() OVER (ORDER BY (ts.total_rebounds / ts.games_played) DESC) AS rebounds_per_game_rank,
+                    ts.assists AS assists_per_game, RANK() OVER (ORDER BY ts.assists DESC) AS assists_per_game_rank,
+                    ts.steals AS steals_per_game, RANK() OVER (ORDER BY ts.steals DESC) AS steals_per_game_rank,
+                    ts.blocks AS blocks_per_game, RANK() OVER (ORDER BY ts.blocks DESC) AS blocks_per_game_rank
+             FROM nba_teams_stats ts
+             WHERE ts.season_year = #{season_year}) t1,
+            (SELECT MAX(ts.points) AS points_per_game_max,
+                    MAX(ts.total_rebounds / ts.games_played) AS rebounds_per_game_max,
+                    MAX(ts.assists) AS assists_per_game_max,
+                    MAX(ts.steals) AS steals_per_game_max,
+                    MAX(ts.blocks) AS blocks_per_game_max
+             FROM nba_teams_stats ts
+             WHERE ts.season_year = #{season_year}) t2,
+            (SELECT ROUND(AVG(ts.points), 3) AS points_per_game_avg,
+                    ROUND(AVG(ts.total_rebounds / ts.games_played), 3) AS rebounds_per_game_avg,
+                    ROUND(AVG(ts.assists), 3) AS assists_per_game_avg,
+                    ROUND(AVG(ts.steals), 3) AS steals_per_game_avg,
+                    ROUND(AVG(ts.blocks), 3) AS blocks_per_game_avg
+             FROM nba_teams_stats ts
+             WHERE ts.season_year = #{season_year}) t3
+        WHERE t1.team_id = #{team_id};
     </select>
-
 
 </mapper>

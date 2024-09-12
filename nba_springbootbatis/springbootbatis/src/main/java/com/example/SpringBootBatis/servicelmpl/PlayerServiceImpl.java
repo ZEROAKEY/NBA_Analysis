@@ -1,15 +1,11 @@
 package com.example.SpringBootBatis.servicelmpl;
 
 import com.example.SpringBootBatis.bean.dataBase.PlayerBean;
-import com.example.SpringBootBatis.bean.dataBase.UserBean;
 import com.example.SpringBootBatis.mapper.PlayerMapper;
-import com.example.SpringBootBatis.mapper.UserMapper;
 import com.example.SpringBootBatis.service.PlayerService;
-import com.example.SpringBootBatis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.naming.Name;
 import java.util.List;
 
 /**
@@ -22,16 +18,15 @@ public class PlayerServiceImpl implements PlayerService {
     private PlayerMapper playerMapper;
 
     /**
-     * 都是选填项
+     * 根据不同的参数查询球员列表。每个参数都是可选的。
      *
-     * @param teamId   队伍ID
-     * @param name
-     * @param teamName
-     * @return
+     * @param team_id 队伍ID（可选）
+     * @param player_name 球员名字（可选）
+     * @param team_name 球队名字（可选）
+     * @return 符合条件的球员列表
      */
     @Override
-    public List<PlayerBean> getPlayersByEachParameter(String teamId, String name, String teamName) {
-        List<PlayerBean> playerBeans=playerMapper.getPlayersByEachParameter(teamId,name,teamName);
-        return playerBeans;
+    public List<PlayerBean> getPlayersByEachParameter(Integer team_id, String player_name, String team_name) {
+        return playerMapper.getPlayersByEachParameter(team_id,player_name,team_name);
     }
 }
