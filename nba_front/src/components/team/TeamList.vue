@@ -8,125 +8,88 @@
     </el-breadcrumb>
     <div class="tbox">
       <!-- 球队列表 -->
-      <div class="teambox">
-        <el-card>
-          <el-table :data="eInfoList">
-            <el-table-column label="东部" prop="logo">
-              <!--插入图片链接的代码-->
-              <template slot-scope="scope">
-                <img
-                  :src="scope.row.logo"
-                  alt=""
-                  style="width: 50px; height: 50px"
-                  @click="changeTeam(scope.row.teamId)"
-                />
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-table :data="wInfoList">
-            <el-table-column label="西部" prop="path">
-              <!--插入图片链接的代码-->
-              <template slot-scope="scope">
-                <img
-                  :src="scope.row.logo"
-                  alt=""
-                  style="width: 50px; height: 50px"
-                  @click="changeTeam(scope.row.teamId)"
-                />
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </div>
+
       <div class="infobox">
         <!-- 球队详情 -->
-        <div class="tinfo">
-          <el-card>
+        <el-card class="tinfo">
+          <div>
             <div class="teamPic">
-              <img
-                :src="chooseInfoList.logo"
-                alt=""
-                style="width: 200px; height: 200px"
-              />
+              <img :src="chooseInfoList.team_logo" alt="" style="width: 200px; height: 200px" />
             </div>
+            <h1>{{ this.chooseInfoList.team_name }}</h1>
             <div class="teamInfo">
-              <span>队名：{{ this.chooseInfoList.cnName }}</span>
+              <span>地点：{{ this.chooseInfoList.team_location }}</span>
               <el-divider></el-divider>
-              <span>全名：{{ this.chooseInfoList.fullCnName }}</span>
+              <span>球队名称：{{ this.chooseInfoList.team_alias }}</span>
               <el-divider></el-divider>
-              <span>城市：{{ this.chooseInfoList.city }}</span>
+              <span>赛季：{{ this.chooseInfoList.seasons }}</span>
               <el-divider></el-divider>
-              <span>联盟：{{ this.chooseInfoList.conference }}</span>
+              <span>战绩：{{ this.chooseInfoList.record }}</span>
               <el-divider></el-divider>
-              <span>教练：{{ this.chooseInfoList.coach }}</span>
+              <span>季后赛出场次数：{{ this.chooseInfoList.playoff_appearances }}</span>
               <el-divider></el-divider>
-              <span>主场馆：{{ this.chooseInfoList.venue }}</span>
+              <span>冠军次数：{{ this.chooseInfoList.championships_won }}</span>
+              <el-divider></el-divider>
+            </div>
+          </div>
+        </el-card>
+        <el-card style="width: 45%;">
+          <div class="teamecharts">
+            <div id="myChart"></div>
+          </div>
+        </el-card>
+        <div class="teambox">
+          <el-card style="height: 99.75%;">
+            <div class="team-grid">
+              <div class="team-item" v-for="team in InfoList" :key="team.team_id">
+                <img :src="team.team_logo" alt="" style="width: 60px; height: 60px; cursor: pointer"
+                  @click="changeTeam(team.team_id)" />
+              </div>
             </div>
           </el-card>
-          <el-card>
-            <div class="teamecharts">
-              <div id="myChart"></div>
-            </div>
-          </el-card>
+
         </div>
         <!-- 卡牌视图 -->
         <!-- 球队对应球员个人信息 -->
-        <div class="pinfo">
-          <el-card>
-            <!-- 搜索与输入框 -->
-            <el-row :gutter="20">
-              <el-col :span="12">
-                <el-input
-                  placeholder="请输入球员姓名（支持中英模糊搜索）"
-                  v-model="queryAllPlayer.name"
-                  clearable
-                  @clear="getAllPlayerInfoList"
-                >
-                  <el-button
-                    slot="append"
-                    icon="el-icon-search"
-                    @click="getAllPlayerInfoList"
-                  ></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
-            <el-table :data="pInfoList" border stripe>
-              <el-table-column
-                type="index"
-                :index="indexMethod"
-              ></el-table-column>
-              <el-table-column label="姓名" prop="cnName"></el-table-column>
-              <el-table-column label="位置" prop="position"></el-table-column>
-              <el-table-column label="队伍" prop="teamName"></el-table-column>
-              <el-table-column label="英文" prop="enName"></el-table-column>
-              <el-table-column label="号码" prop="jerseyNum"></el-table-column>
-              <el-table-column label="身高(cm)" prop="height"></el-table-column>
-              <el-table-column label="体重(kg)" prop="weight"></el-table-column>
-              <el-table-column label="生日" prop="birthDate"></el-table-column>
-              <el-table-column
-                label="被选秀年"
-                prop="draftYear"
-              ></el-table-column>
-            </el-table>
-            <!-- 分页组件 -->
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="queryPlayer.pageNum"
-              :page-sizes="[10, 20, 50]"
-              :page-size="queryPlayer.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total"
-            >
-              <!-- size-change 每页显示多少条改变的事件
+
+      </div>
+      <div class="pinfo">
+        <el-card>
+          <!-- 搜索与输入框 -->
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-input placeholder="请输入球员姓名（支持模糊搜索）" v-model="queryAllPlayer.player_name" clearable
+                @clear="getAllPlayerInfoList">
+                <el-button slot="append" icon="el-icon-search" @click="getAllPlayerInfoList"></el-button>
+              </el-input>
+            </el-col>
+          </el-row>
+          <el-table :data="pInfoList" border stripe>
+            <el-table-column type="index" :index="indexMethod"></el-table-column>
+            <el-table-column label="姓名" prop="player_name"></el-table-column>
+            <el-table-column label="出手数" prop="field_goals_attempted"></el-table-column>
+            <el-table-column label="命中率" prop="field_goal_percentage"></el-table-column>
+            <el-table-column label="场均得分" prop="points_per_game"></el-table-column>
+            <el-table-column label="得分" prop="points"></el-table-column>
+            <el-table-column label="参赛场次" prop="games_played"></el-table-column>
+            <el-table-column label="场均出场时间" prop="minutes_per_game"></el-table-column>
+            <el-table-column label="总出场时间" prop="minutes_played"></el-table-column>
+            <el-table-column label="职业生涯开始年份" prop="career_start_year"></el-table-column>
+            <el-table-column label="职业生涯结束年份" prop="career_end_year"></el-table-column>
+            <el-table-column label="职业生涯年数" prop="years_played"></el-table-column>
+          </el-table>
+          <!-- 分页组件 -->
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="queryPlayer.pageNum" :page-sizes="[10, 20, 50]" :page-size="queryPlayer.pageSize"
+            layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <!-- size-change 每页显示多少条改变的事件
       current-change 改变页数的事件
       current-page 当前是第几页
       page-sizes 几种每页多少条的选项显示
       page-size 每页显示x条数据 -->
-              <!-- layout:total：共x条 sizes:每页显示多少条的显示菜单 -->
-            </el-pagination>
-          </el-card>
-        </div>
+            <!-- layout:total：共x条 sizes:每页显示多少条的显示菜单 -->
+          </el-pagination>
+        </el-card>
       </div>
     </div>
   </div>
@@ -140,7 +103,6 @@ export default {
     this.getPlayerInfoList();
     //获取球队信息列表
     this.getTeamInfoListW();
-    this.getTeamInfoListE();
     this.getTeamInfoListC();
     this.getTeamInfoListR();
   },
@@ -148,7 +110,7 @@ export default {
     return {
       total: 0,
       //权限列表
-      wInfoList: [],
+      InfoList: [],
       eInfoList: [],
       pInfoList: [],
       chooseInfoList: [],
@@ -156,143 +118,132 @@ export default {
       allpInfoList: [],
       //获取所以球员信息列表的参数
       queryAllPlayer: {
-        name: "",
+        player_name: "",
         pageNum: 1,
         pageSize: 20,
       },
       //获取球员信息列表的参数
       queryPlayer: {
-        teamId: 1, //默认访问老鹰
+        team_id: 1, //默认访问老鹰
         pageNum: 1,
         pageSize: 20,
       },
       queryW: {
         pageNum: 1,
         pageSize: 50,
-        seasonId: 2020,
-        seasonType: 1,
-        conference: "west",
-      },
-      queryE: {
-        pageNum: 1,
-        pageSize: 50,
-        seasonId: 2020,
-        seasonType: 1,
-        conference: "east",
+        season_year: 2020,
       },
       queryC: {
         pageNum: 1,
         pageSize: 50,
-        seasonId: 2020,
-        seasonType: 1,
-        teamId: 1,
+        season_year: 2020,
+        team_id: 1,
       },
       //柱状图数据参数
       queryR: {
-        seasonId: 2020,
-        seasonType: 1,
-        teamId: 1,
+        season_year: 2020,
+        team_id: 1,
       },
+      myChart: null, // 将 myChart 保存为实例的一个属性
     };
   },
   mounted() {
-    // this.drawLine();
+    // 初始化图表
+    this.drawLine();
+
+    // 监听窗口大小变化事件
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeDestroy() {
+    // 移除窗口大小变化事件监听器
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    //echarts表
     drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = echarts.init(document.getElementById("myChart"));
+      // 基于准备好的 dom，初始化 echarts 实例
+      this.myChart = echarts.init(document.getElementById("myChart"));
       // 绘制图表
-      myChart.setOption({
-        title: { text: "联盟对比" },
+      this.myChart.setOption({
+        title: { text: "2020-2024赛季总数据对比", top: '5%', },
         tooltip: {
           trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-          textStyle: {
-            fontSize: 18,
-          },
+          axisPointer: { type: "shadow" },
+          textStyle: { fontSize: 18 },
+        },
+        grid: {
+          top: '20%', // 增加 grid 的 top 值，控制图表与标题和 legend 之间的间距
         },
         legend: {
-          data: ["球员", "联盟平均值", "联盟最高值"],
-          textStyle: {
-            fontSize: 18,
-          },
+          data: ["本队场均", "联盟平均值", "联盟最高值"],
+          textStyle: { fontSize: 18 },
+          top: '10%',
         },
         xAxis: [
           {
             type: "category",
-            data: ["得分", "篮板", "助攻", "抢断", "盖帽"],
-            textStyle: {
-              fontSize: 20,
-            },
+            data: ["场均得分", "场均篮板", "场均助攻", "场均抢断", "场均盖帽"],
+            textStyle: { fontSize: 20 },
           },
           {
             type: "category",
             position: "bottom",
             offset: 25,
-            axisPointer: {
-              type: "none",
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLine: {
-              show: false,
-            },
+            axisPointer: { type: "none" },
+            axisTick: { show: false },
+            axisLine: { show: false },
             data: [
-              "联盟第" + this.RankList.pointsPG_rank,
-              "联盟第" + this.RankList.reboundsPG_rank,
-              "联盟第" + this.RankList.assistsPG_rank,
-              "联盟第" + this.RankList.stealsPG_rank,
-              "联盟第" + this.RankList.blocksPG_rank,
+              "联盟第" + this.RankList.points_per_game_rank,
+              "联盟第" + this.RankList.rebounds_per_game_rank,
+              "联盟第" + this.RankList.assists_per_game_rank,
+              "联盟第" + this.RankList.steals_per_game_rank,
+              "联盟第" + this.RankList.blocks_per_game_rank,
             ],
-            textStyle: {
-              fontSize: 20,
-            },
+            textStyle: { fontSize: 20 },
           },
         ],
-        yAxis: {
-          type: "value",
-        },
+        yAxis: { type: "value" },
         series: [
           {
-            name: "球员",
+            name: "本队场均",
             type: "bar",
             data: [
-              this.RankList.pointsPG,
-              this.RankList.reboundsPG,
-              this.RankList.assistsPG,
-              this.RankList.stealsPG,
-              this.RankList.blocksPG,
+              this.RankList.points_per_game,
+              this.RankList.rebounds_per_game,
+              this.RankList.assists_per_game,
+              this.RankList.steals_per_game,
+              this.RankList.blocks_per_game,
             ],
           },
           {
             name: "联盟平均值",
             type: "bar",
             data: [
-              this.RankList.pointsPG_avg,
-              this.RankList.reboundsPG_avg,
-              this.RankList.assistsPG_avg,
-              this.RankList.stealsPG_avg,
-              this.RankList.blocksPG_avg,
+              this.RankList.points_per_game_avg,
+              this.RankList.total_rebounds_avg,
+              this.RankList.assists_per_game_avg,
+              this.RankList.steals_per_game_avg,
+              this.RankList.blocks_per_game_avg,
             ],
           },
           {
             name: "联盟最高值",
             type: "bar",
             data: [
-              this.RankList.pointsPG_max,
-              this.RankList.reboundsPG_max,
-              this.RankList.assistsPG_max,
-              this.RankList.stealsPG_max,
-              this.RankList.blocksPG_rank,
+              this.RankList.points_per_game_max,
+              this.RankList.rebounds_per_game_max,
+              this.RankList.assists_per_game_max,
+              this.RankList.steals_per_game_max,
+              this.RankList.blocks_per_game_max,
             ],
           },
         ],
       });
+    },
+    handleResize() {
+      // 调整图表大小
+      if (this.myChart) {
+        this.myChart.resize();
+      }
     },
     async getAllPlayerInfoList() {
       const { data: res } = await this.$http.get("search/player", {
@@ -327,21 +278,9 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取东部球队信息列表失败");
       } else {
-        this.wInfoList = res.data.pageData;
+        this.InfoList = res.data.pageData;
         // console.log(res);
         this.$message.success("获取东部球队信息列表成功");
-      }
-    },
-    async getTeamInfoListE() {
-      const { data: res } = await this.$http.get("search/team", {
-        params: this.queryE,
-      });
-      if (res.meta.status !== 200) {
-        return this.$message.error("获取西部球队信息列表失败");
-      } else {
-        this.eInfoList = res.data.pageData;
-        // console.log(res);
-        this.$message.success("获取西部球队信息列表成功");
       }
     },
     async getTeamInfoListC() {
@@ -353,7 +292,7 @@ export default {
         return this.$message.error("获取所选球队信息列表失败");
       } else {
         this.chooseInfoList = res.data.pageData[0];
-        // console.log(this.queryC.teamId);
+        // console.log(this.queryC.team_id);
         // console.log(res.data);
         // console.log(this.chooseInfoList);
         this.$message.success("获取所选球队信息列表成功");
@@ -387,10 +326,10 @@ export default {
       this.queryPlayer.pageNum = newPage;
       this.getPlayerInfoList();
     },
-    changeTeam(teamId) {
-      this.queryC.teamId = teamId;
-      this.queryPlayer.teamId = teamId;
-      this.queryR.teamId = teamId;
+    changeTeam(team_id) {
+      this.queryC.team_id = team_id;
+      this.queryPlayer.team_id = team_id;
+      this.queryR.team_id = team_id;
       this.getPlayerInfoList();
       this.getTeamInfoListC();
       this.getTeamInfoListR();
@@ -406,33 +345,60 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tbox {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-.teambox {
-  flex: 0 0 auto;
-}
 .infobox {
   margin-left: 20px;
-  flex: 1 0 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
+
 .tinfo {
   display: flex;
-  flex-wrap: wrap;
   justify-content: flex-start;
+  min-width: 600px;
+  /* 设置一个最小宽度，避免收缩 */
+  box-sizing: border-box;
+  width: 30%;
+
+  .teamInfo {
+    width: 100%;
+  }
 }
+
 .teamecharts {
-  float: right;
-  flex: auto;
+  /* 如果希望防止内容收缩，给它一个最小宽度 */
+  box-sizing: border-box;
 }
+
+.teambox {
+  
+  width: 25%;
+}
+
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 700px;
+}
+
+.team-item {
+  width: 16%;
+  /* 100% / 6 = 16.66% for 6 items per row */
+  margin-bottom: 20px;
+  /* Add some margin between rows */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pinfo {
+  margin-left: 20px;
+}
+
 #myChart {
-  width: 1000px;
+  width: 100%;
+  /* 设置为 100% 宽度 */
   height: 600px;
+  /* 高度可以固定 */
 }
 </style>

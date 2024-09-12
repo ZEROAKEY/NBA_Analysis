@@ -18,15 +18,6 @@
             @change="handleChangeY"
           ></el-cascader>
         </div>
-        <!-- 选择栏-季度 -->
-        <div class="blockM">
-          <span class="demonstration"></span>
-          <el-cascader
-            v-model="valueM"
-            :options="optionsM"
-            @change="handleChangeM"
-          ></el-cascader>
-        </div>
         <!-- 选择栏-位置 -->
         <div class="blockP">
           <span class="demonstration"></span>
@@ -42,7 +33,7 @@
               <el-col :span="60">
                 <el-input
                   placeholder="请输入球员名"
-                  v-model="queryinfoP.name"
+                  v-model="queryinfoP.player_name"
                   clearable
                   @clear="getPlayerDataList"
                 >
@@ -63,77 +54,77 @@
           label="排名"
           :index="indexMethod"
         ></el-table-column>
-        <el-table-column label="球员" prop="cnName"></el-table-column>
-        <el-table-column label="球队" prop="teamName"></el-table-column>
+        <el-table-column label="球员" prop="player_name"></el-table-column>
+        <el-table-column label="球队" prop="team_name"></el-table-column>
         <el-table-column label="位置" prop="position"></el-table-column>
-        <el-table-column label="得分" prop="pointsPG" sortable>
+        <el-table-column label="场均得分" prop="points_per_game" sortable>
         </el-table-column>
         <el-table-column
           label="出手数"
-          prop="fgAttemptedPG"
+          prop="field_goals_attempted"
           sortable
         ></el-table-column>
-        <el-table-column label="命中率" prop="fgPCT" sortable></el-table-column>
+        <el-table-column label="命中率" prop="field_goal_pct" sortable></el-table-column>
         <el-table-column
           label="3分出手"
-          prop="threesAttemptedPG"
+          prop="three_pointer_attempted"
           sortable
         ></el-table-column>
         <el-table-column
           label="3分命中率"
-          prop="threesMadePG"
+          prop="three_pointer_pct"
           sortable
         ></el-table-column>
         <el-table-column
           label="罚球次数"
-          prop="ftAttemptedPG"
+          prop="free_throws_attempted"
           sortable
         ></el-table-column>
         <el-table-column
           label="罚球命中率"
-          prop="ftPCT"
+          prop="free_throw_pct"
           sortable
         ></el-table-column>
         <el-table-column
           label="篮板"
-          prop="reboundsPG"
+          prop="total_rebounds"
           sortable
         ></el-table-column>
         <el-table-column
           label="前场篮板"
-          prop="offensiveReboundsPG"
+          prop="offensive_rebounds"
           sortable
         ></el-table-column>
         <el-table-column
           label="后场篮板"
-          prop="defensiveReboundsPG"
+          prop="defensive_rebounds"
           sortable
         ></el-table-column>
         <el-table-column
           label="助攻"
-          prop="assistsPG"
+          prop="assists"
           sortable
         ></el-table-column>
         <el-table-column
           label="抢断"
-          prop="stealsPG"
+          prop="steals"
           sortable
         ></el-table-column>
         <el-table-column
           label="盖帽"
-          prop="blocksPG"
+          prop="blocks"
           sortable
         ></el-table-column>
         <el-table-column
           label="失误"
-          prop="turnoversPG"
+          prop="turnovers"
           sortable
         ></el-table-column>
-        <el-table-column label="犯规" prop="foulsPG" sortable></el-table-column>
-        <el-table-column label="场次" prop="games" sortable></el-table-column>
+        <el-table-column label="犯规" prop="personal_fouls" sortable></el-table-column>
+        <el-table-column label="场次" prop="games_played" sortable></el-table-column>
         <el-table-column
-          label="上场时间"
-          prop="minutesPG"
+          label="场均出场时间"
+          prop="minutes_per_game"
           sortable
         ></el-table-column>
       </el-table>
@@ -172,13 +163,12 @@ export default {
       total: 0,
       //获取球员成绩的参数
       queryinfoP: {
-        seasonId: 2020,
-        seasonType: 1,
+        season_year: 2020,
         pageNum: 1,
         pageSize: 10, //默认10个 一页
-        index: "pointsPG",
+        index: "points",
         position: "",
-        name:"",
+        player_name:"",
       },
       //选择栏数据
       valueY: [2020],
@@ -187,15 +177,23 @@ export default {
       optionsY: [
         {
           value: 2020,
-          label: "2020-2021赛季",
-        },
-        {
-          value: 2019,
           label: "2019-2020赛季",
         },
         {
-          value: 2018,
-          label: "2018-2019赛季",
+          value: 2021,
+          label: "2020-2021赛季",
+        },
+        {
+          value: 2022,
+          label: "2021-2022赛季",
+        },
+        {
+          value: 2023,
+          label: "2022-2023赛季",
+        },
+        {
+          value: 2024,
+          label: "2023-2024赛季",
         },
       ],
       optionsM: [
@@ -258,12 +256,7 @@ export default {
     },
     handleChangeY(valueY) {
       //   console.log(valueY);
-      this.queryinfoP.seasonId = valueY[0];
-      this.getPlayerDataList();
-    },
-    handleChangeM(valueM) {
-      //   console.log(valueM);
-      this.queryinfoP.seasonType = valueM[0];
+      this.queryinfoP.season_year = valueY[0];
       this.getPlayerDataList();
     },
     handleChangeP(valueP) {

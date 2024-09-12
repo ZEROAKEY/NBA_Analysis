@@ -13,137 +13,57 @@
         <!-- 选择栏-赛季 -->
         <div class="blockY">
           <span class="demonstration"></span>
-          <el-cascader
-            v-model="valueY"
-            :options="optionsY"
-            @change="handleChangeY"
-          ></el-cascader>
-        </div>
-        <!-- 选择栏-季度 -->
-        <div class="blockM">
-          <span class="demonstration"></span>
-          <el-cascader
-            v-model="valueM"
-            :options="optionsM"
-            @change="handleChangeM"
-          ></el-cascader>
+          <el-cascader v-model="valueY" :options="optionsY" @change="handleChangeY"></el-cascader>
         </div>
         <div class="searchTeam">
-         <!-- 搜索与输入框 -->
-            <el-row :gutter="70">
-              <el-col :span="60">
-                <el-input
-                  placeholder="请输入球队名"
-                  v-model="queryinfoT.name"
-                  clearable
-                  @clear="getTeamDataList"
-                >
-                  <el-button
-                    slot="append"
-                    icon="el-icon-search"
-                    @click="getTeamDataList"
-                  ></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
+          <!-- 搜索与输入框 -->
+          <el-row :gutter="70">
+            <el-col :span="60">
+              <el-input placeholder="请输入球队名" v-model="queryinfoT.team_name" clearable @clear="getTeamDataList">
+                <el-button slot="append" icon="el-icon-search" @click="getTeamDataList"></el-button>
+              </el-input>
+            </el-col>
+          </el-row>
         </div>
       </div>
 
       <el-table :data="PlayerDataList" border stripe>
-        <el-table-column
-          type="index"
-          label="排名"
-          :index="indexMethod"
-        ></el-table-column>
+        <el-table-column type="index" label="排名" :index="indexMethod"></el-table-column>
         <el-table-column prop="logo">
           <!--插入图片链接的代码-->
           <template slot-scope="scope">
-            <img
-              :src="scope.row.logo"
-              alt=""
-              style="width: 50px; height: 50px"
-            />
+            <div style="text-align: center">
+              <img :src="scope.row.team_logo" alt=""
+                style="width: 50px; height: 50px; display: block; margin: 0 auto" />
+            </div>
           </template>
         </el-table-column>
-        <el-table-column label="球队" prop="cnName"></el-table-column>
-        <el-table-column label="得分" prop="pointsPG" sortable>
+
+        <el-table-column label="球队" prop="team_name"></el-table-column>
+        <el-table-column label="得分" prop="points" sortable>
         </el-table-column>
-        <el-table-column
-          label="出手数"
-          prop="fgAttemptedPG"
-          sortable
-        ></el-table-column>
-        <el-table-column label="命中率" prop="fgPCT" sortable></el-table-column>
-        <el-table-column
-          label="3分出手"
-          prop="threesAttemptedPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="3分命中率"
-          prop="threesMadePG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="罚球次数"
-          prop="ftAttemptedPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="罚球命中率"
-          prop="ftPCT"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="篮板"
-          prop="reboundsPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="前场篮板"
-          prop="offensiveReboundsPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="后场篮板"
-          prop="defensiveReboundsPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="助攻"
-          prop="assistsPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="抢断"
-          prop="stealsPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="盖帽"
-          prop="blocksPG"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="失误"
-          prop="turnoversPG"
-          sortable
-        ></el-table-column>
-        <el-table-column label="犯规" prop="foulsPG" sortable></el-table-column>
-        <el-table-column label="场次" prop="games" sortable></el-table-column>
+        <el-table-column label="出手数" prop="field_goals_attempted" sortable></el-table-column>
+        <el-table-column label="命中率" prop="field_goal_percentage" sortable></el-table-column>
+        <el-table-column label="3分出手" prop="three_pointer_attempted" sortable></el-table-column>
+        <el-table-column label="3分命中率" prop="three_pointer_percentage" sortable></el-table-column>
+        <el-table-column label="罚球次数" prop="free_throws_attempted" sortable></el-table-column>
+        <el-table-column label="罚球命中率" prop="free_throw_percentage" sortable></el-table-column>
+        <el-table-column label="篮板" prop="total_rebounds" sortable></el-table-column>
+        <el-table-column label="前场篮板" prop="offensive_rebounds" sortable></el-table-column>
+        <el-table-column label="后场篮板" prop="defensive_rebounds" sortable></el-table-column>
+        <el-table-column label="助攻" prop="assists" sortable></el-table-column>
+        <el-table-column label="抢断" prop="steals" sortable></el-table-column>
+        <el-table-column label="盖帽" prop="blocks" sortable></el-table-column>
+        <el-table-column label="失误" prop="turnovers" sortable></el-table-column>
+        <el-table-column label="犯规" prop="personal_fouls" sortable></el-table-column>
+        <el-table-column label="场次" prop="games_played" sortable></el-table-column>
       </el-table>
     </el-card>
 
     <!-- 分页组件 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="queryinfoT.pageNum"
-      :page-sizes="[10,20,50]"
-      :page-size="queryinfoT.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      :current-page="queryinfoT.pageNum" :page-sizes="[10, 20, 50]" :page-size="queryinfoT.pageSize"
+      layout="total, sizes, prev, pager, next, jumper" :total="total">
       <!-- size-change 每页显示多少条改变的事件
       current-change 改变页数的事件
       current-page 当前是第几页
@@ -167,13 +87,12 @@ export default {
       total: 0,
       //获取球员成绩的参数
       queryinfoT: {
-        seasonId: 2020,
-        seasonType: 1,
+        season_year: 2020,
         pageNum: 1,
         pageSize: 10, //默认50个 一页
-        index: "pointsPG",
+        index: "points",
         position: "",
-        name:"",
+        team_name: "",
       },
       //选择栏数据
       valueY: [2020],
@@ -182,45 +101,25 @@ export default {
       optionsY: [
         {
           value: 2020,
-          label: "2020-2021赛季",
-        },
-        {
-          value: 2019,
           label: "2019-2020赛季",
         },
         {
-          value: 2018,
-          label: "2018-2019赛季",
+          value: 2021,
+          label: "2020-2021赛季",
+        },
+        {
+          value: 2022,
+          label: "2021-2022赛季",
+        },
+        {
+          value: 2023,
+          label: "2022-2023赛季",
+        },
+        {
+          value: 2024,
+          label: "2023-2024赛季",
         },
       ],
-      optionsM: [
-        {
-          value: 0,
-          label: "季前赛",
-        },
-        {
-          value: 1,
-          label: "常规赛",
-        },
-        {
-          value: 2,
-          label: "季后赛",
-        },
-      ],
-      //   optionsP: [
-      //     {
-      //       value: "前锋",
-      //       label: "前锋",
-      //     },
-      //     {
-      //       value: "中锋",
-      //       label: "中锋",
-      //     },
-      //     {
-      //       value: "后卫",
-      //       label: "后卫",
-      //     },
-      //   ],
     };
   },
   methods: {
@@ -253,12 +152,7 @@ export default {
     },
     handleChangeY(valueY) {
       //   console.log(valueY);
-      this.queryinfoT.seasonId = valueY[0];
-      this.getTeamDataList();
-    },
-    handleChangeM(valueM) {
-      //   console.log(valueM);
-      this.queryinfoT.seasonType = valueM[0];
+      this.queryinfoT.season_year = valueY[0];
       this.getTeamDataList();
     },
     handleChangeP(valueP) {
@@ -283,13 +177,16 @@ export default {
   justify-content: flex-start;
   align-content: flex-start;
 }
+
 .blockM {
   margin-left: 20px;
 }
+
 .blockP {
   margin-left: 20px;
 }
-.searchTeam{
+
+.searchTeam {
   margin-left: 20px;
 }
 </style>
