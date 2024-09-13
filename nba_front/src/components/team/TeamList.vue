@@ -18,18 +18,18 @@
             </div>
             <h1>{{ this.chooseInfoList.team_name }}</h1>
             <div class="teamInfo">
-              <span>地点：{{ this.chooseInfoList.team_location }}</span>
-              <el-divider></el-divider>
-              <span>球队名称：{{ this.chooseInfoList.team_alias }}</span>
-              <el-divider></el-divider>
-              <span>赛季：{{ this.chooseInfoList.seasons }}</span>
-              <el-divider></el-divider>
-              <span>战绩：{{ this.chooseInfoList.record }}</span>
-              <el-divider></el-divider>
-              <span>季后赛出场次数：{{ this.chooseInfoList.playoff_appearances }}</span>
-              <el-divider></el-divider>
-              <span>冠军次数：{{ this.chooseInfoList.championships_won }}</span>
-              <el-divider></el-divider>
+              <span>地点：{{ chooseInfoList.team_location }}</span>
+              <div class="underline"></div>
+              <span>球队名称：{{ chooseInfoList.team_alias }}</span>
+              <div class="underline"></div>
+              <span>赛季：{{ chooseInfoList.seasons }}</span>
+              <div class="underline"></div>
+              <span>战绩：{{ chooseInfoList.record }}</span>
+              <div class="underline"></div>
+              <span>季后赛出场次数：{{ chooseInfoList.playoff_appearances }}</span>
+              <div class="underline"></div>
+              <span>冠军次数：{{ chooseInfoList.championships_won }}</span>
+              <div class="underline"></div>
             </div>
           </div>
         </el-card>
@@ -41,7 +41,8 @@
         <div class="teambox">
           <el-card style="height: 99.75%;">
             <div class="team-grid">
-              <div class="team-item" v-for="team in InfoList" :key="team.team_id">
+              <div class="team-item" v-for="team in InfoList" :key="team.team_id"
+                :class="{ 'selected-team': team.team_id === queryC.team_id }">
                 <img :src="team.team_logo" alt="" style="width: 60px; height: 60px; cursor: pointer"
                   @click="changeTeam(team.team_id)" />
               </div>
@@ -370,7 +371,7 @@ export default {
 }
 
 .teambox {
-  
+
   width: 25%;
 }
 
@@ -395,6 +396,21 @@ export default {
   margin-left: 20px;
 }
 
+.selected-team img {
+  box-shadow: 0px 0px 10px 3px rgba(76, 76, 77, 0.7);
+  /* 蓝色阴影效果 */
+  border-radius: 50%;
+  /* 使图片边缘圆滑 */
+}
+.underline {
+  width: 100%;
+  height: 2px; /* 下划线的高度 */
+  background-color: #EAEDF1; /* 下划线的颜色，可以根据需要调整 */
+  margin: 5px 0 15px 0; /* 上下间距调整 */
+}
+.teamPic{
+  margin-bottom: 20px;
+}
 #myChart {
   width: 100%;
   /* 设置为 100% 宽度 */
