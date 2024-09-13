@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlite:../nba_spider/nba_total.db
+    url: jdbc:sqlite:src/main/resources/nba_total.db
     driver-class-name: org.sqlite.JDBC
   jpa:
     hibernate:
