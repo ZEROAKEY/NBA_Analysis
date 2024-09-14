@@ -7,16 +7,31 @@
         <span>{{ $t('message.welcome') }}</span>
       </div>
       <div>
-      <el-dropdown @command="changeLanguage" style="margin-right: 10px;">
-        <el-button type="info">
-          <i class="el-icon-s-tools" style="margin-right: 10px;"></i> {{ $t('message.language') }}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-flag" command="en">English</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-flag" command="zh">中文</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-dropdown @command="changeLanguage" style="margin-right: 10px;">
+    <el-button type="info">
+      <i class="el-icon-s-tools" style="margin-right: 10px;"></i>
+      {{ $t('message.language') }}
+      <i class="el-icon-arrow-down el-icon--right"></i>
+    </el-button>
+    <el-dropdown-menu slot="dropdown">
+      <el-dropdown-item 
+        :class="{'selected-language': $i18n.locale === 'en'}"
+        icon="el-icon-flag" 
+        command="en">
+        English
+        <!-- 仅显示勾选图标，不影响hover效果 -->
+        <i v-if="$i18n.locale === 'en'" class="el-icon-check selected-language-icon"></i>
+      </el-dropdown-item>
+      <el-dropdown-item 
+        :class="{'selected-language': $i18n.locale === 'zh'}"
+        icon="el-icon-flag" 
+        command="zh">
+        中文
+        <!-- 仅显示勾选图标，不影响hover效果 -->
+        <i v-if="$i18n.locale === 'zh'" class="el-icon-check selected-language-icon"></i>
+      </el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
       <el-button type="info" @click="logout">{{ $t('message.logout') }}</el-button>
     </div>
     </el-header>
@@ -84,6 +99,7 @@ export default {
   created() {//生命周期函数，页面刚一加载的时候就要立即获取左侧菜单
     this.getMenuList();
     this.activePath = window.sessionStorage.getItem('activePath');
+    this.adjustMenuWidth()
   },
   watch: {
     // 监听 vue-i18n 的 locale 变化，重新渲染菜单
@@ -205,5 +221,15 @@ export default {
   line-height: 24px;
   text-align: center; //文本居中
 
+}
+
+.selected-language-icon {
+  margin: 10px 0 0 10px;
+  float: right;
+  color: #409EFF; /* 选中图标颜色与主题颜色保持一致 */
+}
+.selected-language{
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
 }
 </style>

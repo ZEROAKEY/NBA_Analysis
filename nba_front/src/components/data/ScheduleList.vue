@@ -2,9 +2,9 @@
   <div>
     <!-- 面包屑区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">{{ $t('message.home') }}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }">{{ $t('message.home') }}</el-breadcrumb-item>
       <el-breadcrumb-item>{{ $t('message.data_statistics') }}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{ $t('message.future_games') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.schedule') }}</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-card class="game-schedule">

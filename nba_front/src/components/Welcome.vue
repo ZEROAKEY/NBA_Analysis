@@ -1,5 +1,16 @@
 <template>
     <div>
-        <h3>NBA大数据分析平台是一个数据收集分析平台，本平台主要提供NBA球员的多项数据的展示，其中包括球员基本信息例如姓名、年龄等以及球员各项数据例如篮板、助攻等，以此来通过这些数据进行分析。</h3>
+        <h3>
+            {{ $t('message.welcome1') }}
+        </h3>
+        <h3>
+            {{ $t('message.welcome2') }}
+        </h3>
+        <h3>
+            {{ $t('message.welcome3') }}
+        </h3>
+        <h3>
+            {{ $t('message.welcome4') }}
+        </h3>
     </div>
 </template>
