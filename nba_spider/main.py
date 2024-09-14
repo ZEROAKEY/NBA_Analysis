@@ -1,43 +1,42 @@
-from connectDB import MySQLDatabase
+from SQLiteDB import SQLiteDB
 from model import ModelWrapper
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, mean_squared_error
 import numpy as np
 import pandas as pd
-import joblib
+import sqlite3
 if __name__ == "__main__":
-    # 数据库连接参数
-    db_host = 'your-cloud-db-host'  # 云数据库主机地址
-    db_port = 3306  # 端口，通常MySQL默认是3306
-    db_user = 'your-username'  # 数据库用户名
-    db_password = 'your-password'  # 数据库密码
-    db_name = 'your-database-name'  # 数据库名称
+    # 初始化数据库连接
+    db = SQLiteDB('nba_springbootbatis/springbootbatis/src/main/resources/nba_total.db')
 
-    # 创建数据库对象
-    db = MySQLDatabase(host=db_host, port=db_port, user=db_user, password=db_password, database=db_name)
-
-    # 连接到数据库
+    # 连接数据库
     db.connect()
 
-    # 执行查询并获取结果
-    query = "SELECT * FROM nba_total"
-    results = db.execute_query(query)
+    # 查询比赛数据
+    query = '''
+        SELECT date, leftName, leftGoal, rightName, rightGoal
+        FROM nba_schedule
+        WHERE leftGoal = 0 AND rightGoal = 0
+          AND leftName != '' AND rightName != ''
+          AND leftName != '中国男篮' AND rightName != '中国男篮'
+        ORDER BY date
+    '''
+    games = db.execute_query(query)
 
-    # 输出结果
-    if results:
-        for row in results:
-            print(row)
-    # 关闭数据库连接
-    db.close()
+    for game in games:
+        print(game)
 
-    df = pd.DataFrame(results)
+    # 断开连接
+    db.disconnect()
 
-    # 分离特征和目标变量
-    X = df.drop('home_win', axis=1)
-    y = df['home_win']
+    df = pd.DataFrame(games)
 
-    # 分割数据集
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    # # 分离特征和目标变量
+    # X = df.drop('home_win', axis=1)
+    # y = df['home_win']
+
+    # # 分割数据集
+    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 '''
     模型训练及预测
     # 回归问题 - 使用BayesianRidge模型

@@ -1,7 +1,7 @@
 package com.example.SpringBootBatis.controller;
 
 import com.example.SpringBootBatis.bean.ResponseResult;
-import com.example.SpringBootBatis.bean.dataBase.SeasonSelection;
+import com.example.SpringBootBatis.bean.dataBase.SeasonSelectionBean;
 import com.example.SpringBootBatis.service.SeasonSelectionService;
 import com.example.SpringBootBatis.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class SeasonSelectionController {
     private SeasonSelectionService SeasonSelectionService;
     @GetMapping("/season")
     public ResponseResult getSeason(){
-        List<SeasonSelection> SeasonSelectionBeans = SeasonSelectionService.getSeason();
+        List<SeasonSelectionBean> SeasonSelectionBeans = SeasonSelectionService.getSeason();
         return ResultUtil.querySuccessFull(SeasonSelectionBeans);
     }
 }
