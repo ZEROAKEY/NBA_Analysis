@@ -1,11 +1,11 @@
 package com.example.SpringBootBatis.service;
 
-import com.example.SpringBootBatis.bean.dataBase.SeasonSelection;
+import com.example.SpringBootBatis.bean.dataBase.SeasonSelectionBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface SeasonSelectionService {
-    List<SeasonSelection> getSeason();
+    List<SeasonSelectionBean> getSeason();
 }

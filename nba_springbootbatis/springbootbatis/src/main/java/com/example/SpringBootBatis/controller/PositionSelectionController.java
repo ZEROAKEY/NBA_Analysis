@@ -1,8 +1,8 @@
 package com.example.SpringBootBatis.controller;
 
 import com.example.SpringBootBatis.bean.ResponseResult;
-import com.example.SpringBootBatis.bean.dataBase.SeasonSelectionBean;
-import com.example.SpringBootBatis.service.SeasonSelectionService;
+import com.example.SpringBootBatis.bean.dataBase.PositionSelectionBean;
+import com.example.SpringBootBatis.service.PositionSelectionService;
 import com.example.SpringBootBatis.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/search")
-public class SeasonSelectionController {
+public class PositionSelectionController {
     @Autowired
-    private SeasonSelectionService SeasonSelectionService;
-    @GetMapping("/season")
-    public ResponseResult getSeason(){
-        List<SeasonSelectionBean> SeasonSelectionBeans = SeasonSelectionService.getSeason();
-        return ResultUtil.querySuccessFull(SeasonSelectionBeans);
+    private PositionSelectionService PositionSelectionService;
+    @GetMapping("/position")
+    public ResponseResult getSelection(){
+        List<PositionSelectionBean> positionSelectionBeans = PositionSelectionService.getSelection();
+        return ResultUtil.querySuccessFull(positionSelectionBeans);
     }
 }
