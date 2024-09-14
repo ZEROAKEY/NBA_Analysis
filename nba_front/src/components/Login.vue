@@ -17,8 +17,8 @@
                 </el-form-item>
                 <!-- 按钮区域 -->
                 <el-form-item class="btns">
-                    <el-button @click="login" type="primary">{{ $t('login') }}</el-button>
-                    <el-button @click="resetLoginForm" type="info">{{ $t('reset') }}</el-button>
+                    <el-button @click="login" type="primary">{{ $t('message.login') }}</el-button>
+                    <el-button @click="resetLoginForm" type="info">{{ $t('message.reset') }}</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -68,8 +68,6 @@ export default {
                 // 根据国家代码匹配语言
                 if (countryCode === 'CN') {
                     this.$i18n.locale = 'zh';  // 设置中文
-                } else if (countryCode === 'US' || countryCode === 'GB') {
-                    this.$i18n.locale = 'en';  // 设置英文
                 } else {
                     this.$i18n.locale = 'en';  // 默认英文
                 }
