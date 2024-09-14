@@ -14,8 +14,7 @@ import 'nprogress/nprogress.css'
 //在main.js里配置axios
 import axios from 'axios'
 // import { config } from 'vue/types/umd';
-axios.defaults.baseURL='http://localhost:8888/'
-
+axios.defaults.baseURL = '/api';
 
 
 //axios拦截器
