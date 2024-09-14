@@ -2,9 +2,9 @@
   <div>
     <!-- 面包屑区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>数据统计</el-breadcrumb-item>
-      <el-breadcrumb-item>球队数据</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{ $t('message.home') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.data_statistics') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.team_data') }}</el-breadcrumb-item>
     </el-breadcrumb>
 
     <!-- 卡牌视图 -->
@@ -12,14 +12,14 @@
       <div id="chooseList">
         <!-- 选择栏-赛季 -->
         <div class="blockY">
-          <span class="demonstration"></span>
           <el-cascader v-model="valueY" :options="optionsY" @change="handleChangeY"></el-cascader>
         </div>
         <div class="searchTeam">
           <!-- 搜索与输入框 -->
           <el-row :gutter="70">
             <el-col :span="60">
-              <el-input placeholder="请输入球队名" v-model="queryinfoT.team_name" clearable @clear="getTeamDataList">
+              <el-input :placeholder="$t('message.search') + $t('message.team')" v-model="queryinfoT.team_name"
+                clearable @clear="getTeamDataList">
                 <el-button slot="append" icon="el-icon-search" @click="getTeamDataList"></el-button>
               </el-input>
             </el-col>
@@ -28,9 +28,8 @@
       </div>
 
       <el-table :data="PlayerDataList" border stripe>
-        <el-table-column type="index" label="排名" :index="indexMethod"></el-table-column>
+        <el-table-column type="index" :label="$t('message.rank')" :index="indexMethod"></el-table-column>
         <el-table-column prop="logo">
-          <!--插入图片链接的代码-->
           <template slot-scope="scope">
             <div style="text-align: center">
               <img :src="scope.row.team_logo" alt=""
@@ -38,25 +37,33 @@
             </div>
           </template>
         </el-table-column>
-
-        <el-table-column label="球队" prop="team_name"></el-table-column>
-        <el-table-column label="得分" prop="points" sortable>
+        <el-table-column :label="$t('message.team')" prop="team_name">
+          <template slot-scope="scope">
+            <span>{{ $t(`message.${scope.row.team_name.toLowerCase().replace(/\s+/g, '_')}`) }}</span>
+          </template>
         </el-table-column>
-        <el-table-column label="出手数" prop="field_goals_attempted" sortable></el-table-column>
-        <el-table-column label="命中率" prop="field_goal_percentage" sortable></el-table-column>
-        <el-table-column label="3分出手" prop="three_pointer_attempted" sortable></el-table-column>
-        <el-table-column label="3分命中率" prop="three_pointer_percentage" sortable></el-table-column>
-        <el-table-column label="罚球次数" prop="free_throws_attempted" sortable></el-table-column>
-        <el-table-column label="罚球命中率" prop="free_throw_percentage" sortable></el-table-column>
-        <el-table-column label="篮板" prop="total_rebounds" sortable></el-table-column>
-        <el-table-column label="前场篮板" prop="offensive_rebounds" sortable></el-table-column>
-        <el-table-column label="后场篮板" prop="defensive_rebounds" sortable></el-table-column>
-        <el-table-column label="助攻" prop="assists" sortable></el-table-column>
-        <el-table-column label="抢断" prop="steals" sortable></el-table-column>
-        <el-table-column label="盖帽" prop="blocks" sortable></el-table-column>
-        <el-table-column label="失误" prop="turnovers" sortable></el-table-column>
-        <el-table-column label="犯规" prop="personal_fouls" sortable></el-table-column>
-        <el-table-column label="场次" prop="games_played" sortable></el-table-column>
+        <el-table-column :label="$t('message.points')" prop="points" sortable></el-table-column>
+        <el-table-column :label="$t('message.field_goals_attempted')" prop="field_goals_attempted"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.field_goal_percentage')" prop="field_goal_percentage"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.three_point_attempted')" prop="three_pointer_attempted"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.three_point_percentage')" prop="three_pointer_percentage"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.free_throw_attempts')" prop="free_throws_attempted"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.free_throw_percentage')" prop="free_throw_percentage"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.rebounds')" prop="total_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.offensive_rebounds')" prop="offensive_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.defensive_rebounds')" prop="defensive_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.assists')" prop="assists" sortable></el-table-column>
+        <el-table-column :label="$t('message.steals')" prop="steals" sortable></el-table-column>
+        <el-table-column :label="$t('message.blocks')" prop="blocks" sortable></el-table-column>
+        <el-table-column :label="$t('message.turnovers')" prop="turnovers" sortable></el-table-column>
+        <el-table-column :label="$t('message.personal_fouls')" prop="personal_fouls" sortable></el-table-column>
+        <el-table-column :label="$t('message.games_played')" prop="games_played" sortable></el-table-column>
       </el-table>
     </el-card>
 
@@ -64,15 +71,10 @@
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
       :current-page="queryinfoT.pageNum" :page-sizes="[10, 20, 50]" :page-size="queryinfoT.pageSize"
       layout="total, sizes, prev, pager, next, jumper" :total="total">
-      <!-- size-change 每页显示多少条改变的事件
-      current-change 改变页数的事件
-      current-page 当前是第几页
-      page-sizes 几种每页多少条的选项显示
-      page-size 每页显示x条数据 -->
-      <!-- layout:total：共x条 sizes:每页显示多少条的显示菜单 -->
     </el-pagination>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -109,10 +111,10 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取赛季列表失败");
       } else {
-        for(let i =0; i< res.data.length;i++){
+        for (let i = 0; i < res.data.length; i++) {
           this.optionsY.push({
             value: res.data[i],
-            label: res.data[i]-1 +'-'+res.data[i]+'赛季'
+            label: res.data[i] - 1 + '-' + res.data[i]
           })
         }
       }
@@ -125,12 +127,17 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取球队成绩列表失败");
       } else {
+        // 在获取数据后处理 team_name 为国际化格式
+        res.data.pageData.forEach(team => {
+          team.team_name = team.team_name.toLowerCase().replace(/\s+/g, '_');
+        });
+
         this.PlayerDataList = res.data.pageData;
-        // console.log(res.data);
         this.total = res.data.totalNum;
-        this.$message.success("获取球对成绩列表成功");
+        this.$message.success("获取球队成绩列表成功");
       }
     },
+
 
     // 监听pageSize改变的事件
     handleSizeChange(newSize) {

@@ -2,153 +2,74 @@
   <div>
     <!-- 面包屑区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>数据统计</el-breadcrumb-item>
-      <el-breadcrumb-item>球员数据</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{ $t('message.home') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.data_statistics') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.player_data') }}</el-breadcrumb-item>
     </el-breadcrumb>
+
     <!-- 卡牌视图 -->
     <el-card>
       <div id="chooseList">
         <!-- 选择栏-赛季 -->
         <div class="blockY">
-          <span class="demonstration"></span>
-          <el-cascader
-            v-model="valueY"
-            :options="optionsY"
-            @change="handleChangeY"
-          ></el-cascader>
+          <el-cascader v-model="valueY" :options="optionsY" @change="handleChangeY"></el-cascader>
         </div>
+
         <!-- 选择栏-位置 -->
         <div class="blockP">
-          <span class="demonstration"></span>
-          <el-cascader
-            v-model="valueP"
-            :options="optionsP"
-            @change="handleChangeP"
-          ></el-cascader>
+          <el-cascader :placeholder="$t('message.search') + $t('message.position')" v-model="valueP" :options="optionsP"
+            @change="handleChangeP"></el-cascader>
         </div>
+
         <div class="searchPlayer">
-         <!-- 搜索与输入框 -->
-            <el-row :gutter="70">
-              <el-col :span="60">
-                <el-input
-                  placeholder="请输入球员名"
-                  v-model="queryinfoP.player_name"
-                  clearable
-                  @clear="getPlayerDataList"
-                >
-                  <el-button
-                    slot="append"
-                    icon="el-icon-search"
-                    @click="getPlayerDataList"
-                  ></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
+          <!-- 搜索与输入框 -->
+          <el-row :gutter="70">
+            <el-col :span="60">
+              <el-input :placeholder="$t('message.search') + $t('message.player')" v-model="queryinfoP.player_name"
+                clearable @clear="getPlayerDataList">
+                <el-button slot="append" icon="el-icon-search" @click="getPlayerDataList"></el-button>
+              </el-input>
+            </el-col>
+          </el-row>
         </div>
       </div>
 
       <el-table :data="PlayerDataList" border stripe>
-        <el-table-column
-          type="index"
-          label="排名"
-          :index="indexMethod"
-        ></el-table-column>
-        <el-table-column label="球员" prop="player_name"></el-table-column>
-        <el-table-column label="球队" prop="team_name"></el-table-column>
-        <el-table-column label="位置" prop="position"></el-table-column>
-        <el-table-column label="场均得分" prop="points_per_game" sortable>
-        </el-table-column>
-        <el-table-column
-          label="出手数"
-          prop="field_goals_attempted"
-          sortable
-        ></el-table-column>
-        <el-table-column label="命中率" prop="field_goal_pct" sortable></el-table-column>
-        <el-table-column
-          label="3分出手"
-          prop="three_pointer_attempted"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="3分命中率"
-          prop="three_pointer_pct"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="罚球次数"
-          prop="free_throws_attempted"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="罚球命中率"
-          prop="free_throw_pct"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="篮板"
-          prop="total_rebounds"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="前场篮板"
-          prop="offensive_rebounds"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="后场篮板"
-          prop="defensive_rebounds"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="助攻"
-          prop="assists"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="抢断"
-          prop="steals"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="盖帽"
-          prop="blocks"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="失误"
-          prop="turnovers"
-          sortable
-        ></el-table-column>
-        <el-table-column label="犯规" prop="personal_fouls" sortable></el-table-column>
-        <el-table-column label="场次" prop="games_played" sortable></el-table-column>
-        <el-table-column
-          label="场均出场时间"
-          prop="minutes_per_game"
-          sortable
-        ></el-table-column>
+        <el-table-column type="index" :label="$t('message.rank')" :index="indexMethod"></el-table-column>
+        <el-table-column :label="$t('message.player')" prop="player_name"></el-table-column>
+        <el-table-column :label="$t('message.team')" prop="team_name"></el-table-column>
+        <el-table-column :label="$t('message.position')" prop="position"></el-table-column>
+        <el-table-column :label="$t('message.avg_score')" prop="points_per_game" sortable></el-table-column>
+        <el-table-column :label="$t('message.field_goals_attempted')" prop="field_goals_attempted" sortable></el-table-column>
+        <el-table-column :label="$t('message.field_goal_percentage')" prop="field_goal_pct" sortable></el-table-column>
+        <el-table-column :label="$t('message.three_point_attempted')" prop="three_pointer_attempted"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.three_point_percentage')" prop="three_pointer_pct"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.free_throw_attempts')" prop="free_throws_attempted"
+          sortable></el-table-column>
+        <el-table-column :label="$t('message.free_throw_percentage')" prop="free_throw_pct" sortable></el-table-column>
+        <el-table-column :label="$t('message.rebounds')" prop="total_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.offensive_rebounds')" prop="offensive_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.defensive_rebounds')" prop="defensive_rebounds" sortable></el-table-column>
+        <el-table-column :label="$t('message.assists')" prop="assists" sortable></el-table-column>
+        <el-table-column :label="$t('message.steals')" prop="steals" sortable></el-table-column>
+        <el-table-column :label="$t('message.blocks')" prop="blocks" sortable></el-table-column>
+        <el-table-column :label="$t('message.turnovers')" prop="turnovers" sortable></el-table-column>
+        <el-table-column :label="$t('message.fouls')" prop="personal_fouls" sortable></el-table-column>
+        <el-table-column :label="$t('message.games_played')" prop="games_played" sortable></el-table-column>
+        <el-table-column :label="$t('message.minutes_per_game')" prop="minutes_per_game" sortable></el-table-column>
       </el-table>
     </el-card>
 
     <!-- 分页组件 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="queryinfoP.pageNum"
-      :page-sizes="[10,20, 50]"
-      :page-size="queryinfoP.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    >
-      <!-- size-change 每页显示多少条改变的事件
-      current-change 改变页数的事件
-      current-page 当前是第几页
-      page-sizes 几种每页多少条的选项显示
-      page-size 每页显示x条数据 -->
-      <!-- layout:total：共x条 sizes:每页显示多少条的显示菜单 -->
+    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      :current-page="queryinfoP.pageNum" :page-sizes="[10, 20, 50]" :page-size="queryinfoP.pageSize"
+      layout="total, sizes, prev, pager, next, jumper" :total="total">
     </el-pagination>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -170,27 +91,13 @@ export default {
         pageSize: 10, //默认10个 一页
         index: "points",
         position: "",
-        player_name:"",
+        player_name: "",
       },
       //选择栏数据
       valueY: [2020],
       valueM: [1],
       valueP: [],
       optionsY: [],
-      optionsM: [
-        {
-          value: 0,
-          label: "季前赛",
-        },
-        {
-          value: 1,
-          label: "常规赛",
-        },
-        {
-          value: 2,
-          label: "季后赛",
-        },
-      ],
       optionsP: [],
     };
   },
@@ -202,10 +109,10 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取赛季列表失败");
       } else {
-        for(let i =0; i< res.data.length;i++){
+        for (let i = 0; i < res.data.length; i++) {
           this.optionsY.push({
             value: res.data[i],
-            label: res.data[i]-1 +'-'+res.data[i]+'赛季'
+            label: res.data[i] - 1 + '-' + res.data[i]
           })
         }
       }
@@ -217,7 +124,7 @@ export default {
       if (res.meta.status !== 200) {
         return this.$message.error("获取位置列表失败");
       } else {
-        for(let i =0; i< res.data.length;i++){
+        for (let i = 0; i < res.data.length; i++) {
           this.optionsP.push({
             value: res.data[i]['position'],
             label: res.data[i]['position']
@@ -265,8 +172,8 @@ export default {
     },
     //序列自增且不受分页影响，(当前的页码数-1)x当前的每一页中的总条数+1(因为index从0开始计算)
     indexMethod(index) {
-        return (this.queryinfoP.pageNum-1)*(this.queryinfoP.pageSize)+1+index;
-  },
+      return (this.queryinfoP.pageNum - 1) * (this.queryinfoP.pageSize) + 1 + index;
+    },
   }
 };
 </script>
@@ -278,12 +185,15 @@ export default {
   justify-content: flex-start;
   align-content: flex-start;
 }
+
 .blockM {
   margin-left: 20px;
 }
+
 .blockP {
   margin-left: 20px;
 }
+
 .searchPlayer {
   margin-left: 20px;
 }
