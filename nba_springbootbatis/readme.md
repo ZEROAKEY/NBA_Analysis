@@ -582,3 +582,112 @@ GET http://localhost:8888/search/team
     }
 }
 ```
+以下是基于你最新代码的 `position` 和 `season` 接口文档，包括请求路径、请求方法、请求参数和示例响应等信息。
+
+### 1. **获取去重的 `position` 列表接口文档**
+
+#### URL:
+```
+GET /search/position
+```
+
+#### 描述:
+该接口用于获取去重后的球员位置（`position`）列表。
+
+#### 请求方式:
+```
+GET
+```
+
+#### 请求参数:
+无请求参数。
+
+#### 响应示例:
+```json
+{
+  "code": 200,
+  "message": "Query Successful",
+  "data": [
+    {
+      "team_id": 1,
+      "season_year": 2020,
+      "position": "前锋"
+    },
+    {
+      "team_id": 2,
+      "season_year": 2020,
+      "position": "后卫"
+    }
+  ]
+}
+```
+
+#### 响应字段:
+| 字段                  | 类型    | 描述                        |
+|-----------------------|---------|-----------------------------|
+| `code`                | Integer | 响应状态码，200表示成功      |
+| `message`             | String  | 响应消息                    |
+| `data`                | List    | 球员位置数据列表            |
+| `data.team_id`        | Integer | 球队ID                      |
+| `data.season_year`    | Integer | 赛季年份                    |
+| `data.position`       | String  | 球员位置                    |
+
+#### 状态码:
+- **200** - 请求成功
+- **500** - 服务器内部错误
+
+---
+
+### 2. **获取去重的 `season_year` 列表接口文档**
+
+#### URL:
+```
+GET /search/season
+```
+
+#### 描述:
+该接口用于获取去重后的赛季年份（`season_year`）列表。
+
+#### 请求方式:
+```
+GET
+```
+
+#### 请求参数:
+无请求参数。
+
+#### 响应示例:
+```json
+{
+  "code": 200,
+  "message": "Query Successful",
+  "data": [
+    {
+      "team_id": 1,
+      "season_year": 2020,
+      "position": "前锋"
+    },
+    {
+      "team_id": 2,
+      "season_year": 2019,
+      "position": "后卫"
+    }
+  ]
+}
+```
+
+#### 响应字段:
+| 字段                  | 类型    | 描述                        |
+|-----------------------|---------|-----------------------------|
+| `code`                | Integer | 响应状态码，200表示成功      |
+| `message`             | String  | 响应消息                    |
+| `data`                | List    | 赛季年份数据列表            |
+| `data.team_id`        | Integer | 球队ID                      |
+| `data.season_year`    | Integer | 赛季年份                    |
+| `data.position`       | String  | 球员位置                    |
+
+#### 状态码:
+- **200** - 请求成功
+- **500** - 服务器内部错误
+
+---
