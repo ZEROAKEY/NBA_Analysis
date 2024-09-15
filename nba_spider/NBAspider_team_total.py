@@ -40,6 +40,35 @@ def get_html(url, year, conn):
             # 去掉队名Team中的*号
             df['Team'] = df['Team'].str.rstrip('*')
 
+            # 重命名 DataFrame 列，匹配 SQLite 数据库中的列名
+            df = df.rename(columns={
+                'Team': 'team_name',
+                'G': 'games_played',
+                'MP': 'minutes_played',
+                'FG': 'field_goals',
+                'FGA': 'field_goals_attempted',
+                'FG%': 'field_goal_percentage',
+                '3P': 'three_pointer',
+                '3PA': 'three_pointer_attempted',
+                '3P%': 'three_pointer_percentage',
+                '2P': 'two_pointer',
+                '2PA': 'two_pointer_attempted',
+                '2P%': 'two_pointer_percentage',
+                'FT': 'free_throws',
+                'FTA': 'free_throws_attempted',
+                'FT%': 'free_throw_percentage',
+                'ORB': 'offensive_rebounds',
+                'DRB': 'defensive_rebounds',
+                'TRB': 'total_rebounds',
+                'AST': 'assists',
+                'STL': 'steals',
+                'BLK': 'blocks',
+                'TOV': 'turnovers',
+                'PF': 'personal_fouls',
+                'PTS': 'points',
+                'Year': 'season_year'
+            })
+
             # 显示数据表
             print(f"爬取 {year} 年数据成功!")
             print(df)

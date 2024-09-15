@@ -173,16 +173,12 @@ conn = sqlite3.connect('nba_total.db')
 cursor = conn.cursor()
 
 # 创建存储球队信息的表（在循环外部，只需创建一次）
-cursor.execute('''CREATE TABLE IF NOT EXISTS team_info (
-                    Name TEXT,
-                    Location TEXT,
-                    Team_Names TEXT,
-                    Seasons TEXT,
-                    Record TEXT,
-                    Playoff_Appearances INTEGER,
-                    Championships INTEGER,
-                    Logo TEXT
-                 )''')
+cursor.execute('''INSERT INTO team_info 
+                  (team_name, team_location, team_alias, seasons, record, playoff_appearances, championships_won, team_logo) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+               (team_data["Name"], team_data["Location"], team_data["Team Names"], team_data["Seasons"],
+                team_data["Record"], team_data["Playoff Appearances"], team_data["Championships"], team_data["Logo"]))
+
 
 # 循环获取每个队伍的信息
 for team in teamArr:

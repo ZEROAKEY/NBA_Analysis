@@ -37,6 +37,39 @@ def get_html(url, year, conn):
             df = pd.DataFrame(rows, columns=headers)
             df['Year'] = year  # 添加年份列
 
+            # 重命名 DataFrame 列，匹配 SQLite 数据库中的列名
+            df = df.rename(columns={
+                'Player': 'player_name',
+                'Pos': 'position',
+                'Age': 'age',
+                'Tm': 'team_name',
+                'G': 'games_played',
+                'GS': 'games_started',
+                'MP': 'minutes_played',
+                'FG': 'field_goals',
+                'FGA': 'field_goals_attempted',
+                'FG%': 'field_goal_pct',
+                '3P': 'three_pointer',
+                '3PA': 'three_pointer_attempted',
+                '3P%': 'three_pointer_pct',
+                '2P': 'two_pointer',
+                '2PA': 'two_pointer_attempted',
+                '2P%': 'two_pointer_pct',
+                'eFG%': 'effective_field_goal_pct',  # 匹配数据库中的 effective_field_goal_pct
+                'FT': 'free_throws',
+                'FTA': 'free_throws_attempted',
+                'FT%': 'free_throw_pct',
+                'ORB': 'offensive_rebounds',
+                'DRB': 'defensive_rebounds',
+                'TRB': 'total_rebounds',
+                'AST': 'assists',
+                'STL': 'steals',
+                'BLK': 'blocks',
+                'TOV': 'turnovers',
+                'PF': 'personal_fouls',
+                'PTS': 'points'
+            })
+
             # 显示数据表
             print(f"爬取 {year} 年数据成功!")
             print(df)

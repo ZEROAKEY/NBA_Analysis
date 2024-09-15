@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cb0b7cf-1bd8-4c8f-b805-30e3d62aeaef" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/nba_springbootbatis/springbootbatis/src/test/java/com/example/TenGameMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/dist.zip" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/dist.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/Welcome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/Welcome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/data/PlayerData.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/data/PlayerData.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/data/ScheduleList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/data/ScheduleList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/data/TeamData.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/data/TeamData.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/team/TeamList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/team/TeamList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/components/users/UserList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/components/users/UserList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/locales/en.js" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/locales/en.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/src/locales/zh.js" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/src/locales/zh.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nba_front/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/nba_front/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nba_spider/NBAspider_player_total.py" beforeDir="false" afterPath="$PROJECT_DIR$/nba_spider/NBAspider_player_total.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nba_spider/NBAspider_teamInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/nba_spider/NBAspider_teamInfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nba_spider/NBAspider_team_total.py" beforeDir="false" afterPath="$PROJECT_DIR$/nba_spider/NBAspider_team_total.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nba_spider/model1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/nba_spider/model1.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +68,7 @@
     "WebServerToolWindowPanel.toolwindow.show.date": "false",
     "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
     "WebServerToolWindowPanel.toolwindow.show.size": "false",
-    "git-widget-placeholder": "正在合并 main",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/code/Project/nba_springbootbatis/springbootbatis",
     "node.js.detected.package.eslint": "true",
@@ -168,7 +156,7 @@
       <workItem from="1726243137985" duration="668000" />
       <workItem from="1726243891840" duration="243000" />
       <workItem from="1726301222463" duration="17210000" />
-      <workItem from="1726392749036" duration="11263000" />
+      <workItem from="1726392749036" duration="13192000" />
     </task>
     <servers />
   </component>
