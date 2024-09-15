@@ -2,15 +2,14 @@
   <div>
     <!-- 面包屑区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>球队管理</el-breadcrumb-item>
-      <el-breadcrumb-item>球队详情</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }">{{ $t('message.home') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.team_management') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.team_details') }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="tbox">
-      <!-- 球队列表 -->
 
+    <div class="tbox">
+      <!-- 球队详情 -->
       <div class="infobox">
-        <!-- 球队详情 -->
         <el-card class="tinfo">
           <div>
             <div class="teamPic">
@@ -18,26 +17,28 @@
             </div>
             <h1>{{ this.chooseInfoList.team_name }}</h1>
             <div class="teamInfo">
-              <span>地点：{{ chooseInfoList.team_location }}</span>
+              <span>{{ $t('message.location') }}: {{ chooseInfoList.team_location }}</span>
               <div class="underline"></div>
-              <span>球队名称：{{ chooseInfoList.team_alias }}</span>
+              <span>{{ $t('message.team_name') }}: {{ chooseInfoList.team_alias }}</span>
               <div class="underline"></div>
-              <span>赛季：{{ chooseInfoList.seasons }}</span>
+              <span>{{ $t('message.season') }}: {{ chooseInfoList.seasons }}</span>
               <div class="underline"></div>
-              <span>战绩：{{ chooseInfoList.record }}</span>
+              <span>{{ $t('message.record') }}: {{ chooseInfoList.record }}</span>
               <div class="underline"></div>
-              <span>季后赛出场次数：{{ chooseInfoList.playoff_appearances }}</span>
+              <span>{{ $t('message.playoff_appearances') }}: {{ chooseInfoList.playoff_appearances }}</span>
               <div class="underline"></div>
-              <span>冠军次数：{{ chooseInfoList.championships_won }}</span>
+              <span>{{ $t('message.championships_won') }}: {{ chooseInfoList.championships_won }}</span>
               <div class="underline"></div>
             </div>
           </div>
         </el-card>
+
         <el-card style="width: 45%;">
           <div class="teamecharts">
             <div id="myChart"></div>
           </div>
         </el-card>
+
         <div class="teambox">
           <el-card style="height: 99.75%;">
             <div class="team-grid">
@@ -48,53 +49,48 @@
               </div>
             </div>
           </el-card>
-
         </div>
-        <!-- 卡牌视图 -->
-        <!-- 球队对应球员个人信息 -->
-
       </div>
+
+      <!-- 球员个人信息 -->
       <div class="pinfo">
         <el-card>
-          <!-- 搜索与输入框 -->
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-input placeholder="请输入球员姓名（支持模糊搜索）" v-model="queryAllPlayer.player_name" clearable
-                @clear="getAllPlayerInfoList">
+              <el-input :placeholder="$t('message.search') + $t('message.player')" v-model="queryAllPlayer.player_name"
+                clearable @clear="getAllPlayerInfoList">
                 <el-button slot="append" icon="el-icon-search" @click="getAllPlayerInfoList"></el-button>
               </el-input>
             </el-col>
           </el-row>
+
           <el-table :data="pInfoList" border stripe>
             <el-table-column type="index" :index="indexMethod"></el-table-column>
-            <el-table-column label="姓名" prop="player_name"></el-table-column>
-            <el-table-column label="出手数" prop="field_goals_attempted"></el-table-column>
-            <el-table-column label="命中率" prop="field_goal_percentage"></el-table-column>
-            <el-table-column label="场均得分" prop="points_per_game"></el-table-column>
-            <el-table-column label="得分" prop="points"></el-table-column>
-            <el-table-column label="参赛场次" prop="games_played"></el-table-column>
-            <el-table-column label="场均出场时间" prop="minutes_per_game"></el-table-column>
-            <el-table-column label="总出场时间" prop="minutes_played"></el-table-column>
-            <el-table-column label="职业生涯开始年份" prop="career_start_year"></el-table-column>
-            <el-table-column label="职业生涯结束年份" prop="career_end_year"></el-table-column>
-            <el-table-column label="职业生涯年数" prop="years_played"></el-table-column>
+            <el-table-column :label="$t('message.player')" prop="player_name"></el-table-column>
+            <el-table-column :label="$t('message.field_goals_attempted')"
+              prop="field_goals_attempted"></el-table-column>
+            <el-table-column :label="$t('message.field_goal_percentage')"
+              prop="field_goal_percentage"></el-table-column>
+            <el-table-column :label="$t('message.avg_score')" prop="points_per_game"></el-table-column>
+            <el-table-column :label="$t('message.points')" prop="points"></el-table-column>
+            <el-table-column :label="$t('message.games_played')" prop="games_played"></el-table-column>
+            <el-table-column :label="$t('message.minutes_per_game')" prop="minutes_per_game"></el-table-column>
+            <el-table-column :label="$t('message.career_start_year')" prop="career_start_year"></el-table-column>
+            <el-table-column :label="$t('message.career_end_year')" prop="career_end_year"></el-table-column>
+            <el-table-column :label="$t('message.years_played')" prop="years_played"></el-table-column>
           </el-table>
+
           <!-- 分页组件 -->
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
             :current-page="queryPlayer.pageNum" :page-sizes="[10, 20, 50]" :page-size="queryPlayer.pageSize"
             layout="total, sizes, prev, pager, next, jumper" :total="total">
-            <!-- size-change 每页显示多少条改变的事件
-      current-change 改变页数的事件
-      current-page 当前是第几页
-      page-sizes 几种每页多少条的选项显示
-      page-size 每页显示x条数据 -->
-            <!-- layout:total：共x条 sizes:每页显示多少条的显示菜单 -->
           </el-pagination>
         </el-card>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 let echarts = require("echarts");
@@ -159,30 +155,58 @@ export default {
     // 移除窗口大小变化事件监听器
     window.removeEventListener("resize", this.handleResize);
   },
+  watch: {
+    // 监听 vue-i18n 的 locale 变化，重新渲染图表
+    '$i18n.locale'(newLocale) {
+      this.drawLine(); // 语言切换时，重新绘制图表
+    }
+  },
   methods: {
     drawLine() {
+      // 获取当前语言下的文本
+      const teamAvgText = this.$t('message.team_avg');
+      const leagueAvgText = this.$t('message.league_avg');
+      const leagueMaxText = this.$t('message.league_max');
+      const titleText = this.$t('message.season_data_comparison');
+      const categories = [
+        this.$t('message.points_per_game'),
+        this.$t('message.rebounds_per_game'),
+        this.$t('message.assists_per_game'),
+        this.$t('message.steals_per_game'),
+        this.$t('message.blocks_per_game')
+      ];
+
+      const rankCategories = [
+        this.$t('message.rank_prefix') + this.RankList.points_per_game_rank,
+        this.$t('message.rank_prefix') + this.RankList.rebounds_per_game_rank,
+        this.$t('message.rank_prefix') + this.RankList.assists_per_game_rank,
+        this.$t('message.rank_prefix') + this.RankList.steals_per_game_rank,
+        this.$t('message.rank_prefix') + this.RankList.blocks_per_game_rank,
+      ];
+
       // 基于准备好的 dom，初始化 echarts 实例
       this.myChart = echarts.init(document.getElementById("myChart"));
+
       // 绘制图表
       this.myChart.setOption({
-        title: { text: "2020-2024赛季总数据对比", top: '5%', },
+        title: { text: titleText, top: '5%' },
         tooltip: {
           trigger: "axis",
           axisPointer: { type: "shadow" },
           textStyle: { fontSize: 18 },
         },
         grid: {
-          top: '20%', // 增加 grid 的 top 值，控制图表与标题和 legend 之间的间距
+          top: '20%',
         },
         legend: {
-          data: ["本队场均", "联盟平均值", "联盟最高值"],
+          data: [teamAvgText, leagueAvgText, leagueMaxText],
           textStyle: { fontSize: 18 },
           top: '10%',
         },
         xAxis: [
           {
             type: "category",
-            data: ["场均得分", "场均篮板", "场均助攻", "场均抢断", "场均盖帽"],
+            data: categories,
             textStyle: { fontSize: 20 },
           },
           {
@@ -192,20 +216,14 @@ export default {
             axisPointer: { type: "none" },
             axisTick: { show: false },
             axisLine: { show: false },
-            data: [
-              "联盟第" + this.RankList.points_per_game_rank,
-              "联盟第" + this.RankList.rebounds_per_game_rank,
-              "联盟第" + this.RankList.assists_per_game_rank,
-              "联盟第" + this.RankList.steals_per_game_rank,
-              "联盟第" + this.RankList.blocks_per_game_rank,
-            ],
+            data: rankCategories,
             textStyle: { fontSize: 20 },
           },
         ],
         yAxis: { type: "value" },
         series: [
           {
-            name: "本队场均",
+            name: teamAvgText,
             type: "bar",
             data: [
               this.RankList.points_per_game,
@@ -216,18 +234,18 @@ export default {
             ],
           },
           {
-            name: "联盟平均值",
+            name: leagueAvgText,
             type: "bar",
             data: [
               this.RankList.points_per_game_avg,
-              this.RankList.total_rebounds_avg,
+              this.RankList.rebounds_per_game_avg,
               this.RankList.assists_per_game_avg,
               this.RankList.steals_per_game_avg,
               this.RankList.blocks_per_game_avg,
             ],
           },
           {
-            name: "联盟最高值",
+            name: leagueMaxText,
             type: "bar",
             data: [
               this.RankList.points_per_game_max,
@@ -240,6 +258,7 @@ export default {
         ],
       });
     },
+
     handleResize() {
       // 调整图表大小
       if (this.myChart) {
@@ -402,15 +421,21 @@ export default {
   border-radius: 50%;
   /* 使图片边缘圆滑 */
 }
+
 .underline {
   width: 100%;
-  height: 2px; /* 下划线的高度 */
-  background-color: #EAEDF1; /* 下划线的颜色，可以根据需要调整 */
-  margin: 5px 0 15px 0; /* 上下间距调整 */
+  height: 2px;
+  /* 下划线的高度 */
+  background-color: #EAEDF1;
+  /* 下划线的颜色，可以根据需要调整 */
+  margin: 5px 0 15px 0;
+  /* 上下间距调整 */
 }
-.teamPic{
+
+.teamPic {
   margin-bottom: 20px;
 }
+
 #myChart {
   width: 100%;
   /* 设置为 100% 宽度 */

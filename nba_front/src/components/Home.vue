@@ -7,23 +7,38 @@
         <span>{{ $t('message.welcome') }}</span>
       </div>
       <div>
-      <el-dropdown @command="changeLanguage" style="margin-right: 10px;">
-        <el-button type="info">
-          <i class="el-icon-s-tools" style="margin-right: 10px;"></i> {{ $t('message.language') }}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-flag" command="en">English</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-flag" command="zh">中文</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-dropdown @command="changeLanguage" style="margin-right: 10px;">
+    <el-button type="info">
+      <i class="el-icon-s-tools" style="margin-right: 10px;"></i>
+      {{ $t('message.language') }}
+      <i class="el-icon-arrow-down el-icon--right"></i>
+    </el-button>
+    <el-dropdown-menu slot="dropdown">
+      <el-dropdown-item 
+        :class="{'selected-language': $i18n.locale === 'en'}"
+        icon="el-icon-flag" 
+        command="en">
+        English
+        <!-- 仅显示勾选图标，不影响hover效果 -->
+        <i v-if="$i18n.locale === 'en'" class="el-icon-check selected-language-icon"></i>
+      </el-dropdown-item>
+      <el-dropdown-item 
+        :class="{'selected-language': $i18n.locale === 'zh'}"
+        icon="el-icon-flag" 
+        command="zh">
+        中文
+        <!-- 仅显示勾选图标，不影响hover效果 -->
+        <i v-if="$i18n.locale === 'zh'" class="el-icon-check selected-language-icon"></i>
+      </el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
       <el-button type="info" @click="logout">{{ $t('message.logout') }}</el-button>
     </div>
     </el-header>
     <!-- 页面主体区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside :width="isCollapse ? '64px' : '200px'">
+      <el-aside :width="isCollapse ? '64px' : menuWidth">
         <!-- 侧边栏菜单区域 -->
         <!-- 折叠框 -->
         <!-- <div class="toggle-button" @click="toggleClose">点击折叠</div> -->
@@ -78,24 +93,69 @@ export default {
         '145': 'el-icon-s-data'
       },
       activePath: '',
+      menuWidth: '200px', // 默认菜单宽度
     }
   },
   created() {//生命周期函数，页面刚一加载的时候就要立即获取左侧菜单
     this.getMenuList();
     this.activePath = window.sessionStorage.getItem('activePath');
+    this.adjustMenuWidth()
+  },
+  watch: {
+    // 监听 vue-i18n 的 locale 变化，重新渲染菜单
+    '$i18n.locale'(newLocale) {
+      this.getMenuList(); // 语言切换时重新获取菜单数据并渲染
+      this.adjustMenuWidth(); // 调整菜单宽度
+    },
   },
   methods: {
+    adjustMenuWidth() {
+      if (this.$i18n.locale === 'en') {
+        this.menuWidth = '220px'; // 英文时增加宽度
+      } else {
+        this.menuWidth = '200px'; // 中文时默认宽度
+      }
+    },
     logout() {
       window.sessionStorage.clear();
       this.$router.push("/login");
     },
     //获取所有菜单
     async getMenuList() {
-      const { data: res } = await this.$http.get('menus');
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
-      this.menulist = res.data;
-      //  console.log(res);
-    },
+    const { data: res } = await this.$http.get('menus');
+    if (res.meta.status !== 200) {
+      return this.$message.error(res.meta.msg);
+    }
+
+    // 遍历菜单数据，进行国际化处理
+    this.menulist = res.data.map(item => {
+      return {
+        ...item,
+        authName: this.$t(`message.${this.getMenuKey(item.authName)}`), // 根据authName获取翻译
+        children: item.children.map(subItem => {
+          return {
+            ...subItem,
+            authName: this.$t(`message.${this.getMenuKey(subItem.authName)}`) // 翻译子菜单
+          };
+        })
+      };
+    });
+  },
+
+  // 用于将 authName 转换为国际化键值
+  getMenuKey(authName) {
+    const menuMap = {
+      '用户管理': 'user_management',
+      '用户列表': 'user_list',
+      '球队管理': 'team_management',
+      '球队详情': 'team_details',
+      '数据统计': 'data_statistics',
+      '球员数据': 'player_data',
+      '球队数据': 'team_data',
+      '比赛日程': 'schedule',
+    };
+    return menuMap[authName] || authName; // 返回对应的键，如果没有匹配到，直接返回原authName
+  },
     toggleClose() {
       this.isCollapse = !this.isCollapse;
     },
@@ -161,5 +221,15 @@ export default {
   line-height: 24px;
   text-align: center; //文本居中
 
+}
+
+.selected-language-icon {
+  margin: 10px 0 0 10px;
+  float: right;
+  color: #409EFF; /* 选中图标颜色与主题颜色保持一致 */
+}
+.selected-language{
+  border-color: #c6e2ff;
+  background-color: #ecf5ff;
 }
 </style>

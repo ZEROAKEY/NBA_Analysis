@@ -2,93 +2,54 @@
   <div>
     <!-- 面包屑区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }">{{ $t('message.home') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.user_management') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('message.user_list') }}</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card class="box-card">
       <!-- 搜索与输入框 -->
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-input
-            placeholder="请输入内容"
-            v-model="queryInfo.query"
-            clearable
-            @clear="getUserList"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="getUserList"
-            ></el-button>
+          <el-input :placeholder="$t('message.search_name')" v-model="queryInfo.query" clearable @clear="getUserList">
+            <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true"
-            >添加用户</el-button
-          >
+          <el-button type="primary" @click="addDialogVisible = true">{{ $t('message.add_user') }}</el-button>
         </el-col>
       </el-row>
       <!-- 表格区域 -->
       <el-table :data="userlist" border stripe>
         <el-table-column type="index" :index="indexMethod"></el-table-column>
-        <el-table-column label="姓名" prop="username"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="电话" prop="mobile"></el-table-column>
+        <el-table-column :label="$t('message.username')" prop="username"></el-table-column>
+        <el-table-column :label="$t('message.email')" prop="email"></el-table-column>
+        <el-table-column :label="$t('message.mobile')" prop="mobile"></el-table-column>
         <!-- <el-table-column label="角色" prop="role_name"></el-table-column>
         <el-table-column label="状态" prop="mg_state"> -->
-          <!-- <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
             <el-switch
               v-model="scope.row.mg_state"
               @change="userStateChanged(scope.row)"
             >
             </el-switch>
           </template>
-        </el-table-column> -->
-        <el-table-column label="操作" width="180px">
+</el-table-column> -->
+        <el-table-column :label="$t('message.action')" width="180px">
           <template slot-scope="scope">
             <!-- 修改按钮 -->
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-              @click="getUserFormById(scope.row.id)"
-            ></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini"
+              @click="getUserFormById(scope.row.id)"></el-button>
             <!-- 删除角色按钮 -->
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              size="mini"
-              @click="deletUser(scope.row.id)"
-            ></el-button>
-            <!-- 分配角色按钮
-            <el-tooltip
-              effect="dark"
-              content="分配角色"
-              placement="top"
-              :enterable="false"
-            > -->
-              <!-- <el-button
-                @click="setRole(scope.row)"
-                type="warning"
-                icon="el-icon-setting"
-                size="mini"
-              ></el-button>
-            </el-tooltip> -->
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletUser(scope.row.id,scope.row.rid)"
+              :disabled="scope.row.rid == 0"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页组件 -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryInfo.pageNum"
-        :page-sizes="[1, 2, 5, 10]"
-        :page-size="queryInfo.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      >
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="queryInfo.pageNum" :page-sizes="[1, 2, 5, 10]" :page-size="queryInfo.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total">
         <!-- size-change 每页显示多少条改变的事件
       current-change 改变页数的事件
       current-page 当前是第几页
@@ -99,88 +60,63 @@
     </el-card>
 
     <!-- 添加用户的对话框 -->
-    <el-dialog
-      title="提示"
-      :visible.sync="addDialogVisible"
-      width="50%"
-      @close="closeDiaglog"
-    >
+    <el-dialog :title="$t('message.add_user')" :visible.sync="addDialogVisible" width="50%" @close="closeDiaglog">
       <!-- 内容主题区域 -->
       <!-- 添加用户表单 -->
-      <el-form
-        :model="userForm"
-        :rules="userRules"
-        ref="addFormRef"
-        label-width="70px"
-      >
-        <el-form-item label="用户名" prop="username">
+      <el-form :model="userForm" :rules="userRules" ref="addFormRef" label-width="100px">
+        <el-form-item :label="$t('message.username')" prop="username">
           <el-input v-model="userForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item :label="$t('message.password')" prop="password">
           <el-input v-model="userForm.password"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item :label="$t('message.email')" prop="email">
           <el-input v-model="userForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="手机" prop="mobile">
+        <el-form-item :label="$t('message.mobile')" prop="mobile">
           <el-input v-model="userForm.mobile"></el-input>
         </el-form-item>
       </el-form>
 
       <!-- 底部区域,点击取消或者确定的时候隐藏对话框 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addUser">确 定</el-button>
+        <el-button @click="addDialogVisible = false">{{ $t('message.cancel') }}</el-button>
+        <el-button type="primary" @click="addUser">{{ $t('message.confirm') }}</el-button>
       </span>
     </el-dialog>
 
     <!-- 修改用户的对话框 -->
-    <el-dialog title="提示" :visible.sync="resetDialogVisible" width="50%">
+    <el-dialog :title="$t('message.update_user')" :visible.sync="resetDialogVisible" width="50%">
       <!-- 内容主题区域 -->
       <!-- 添加用户表单 -->
-      <el-form
-        :model="resetuserForm"
-        :rules="resetuserRules"
-        ref="resetFormRef"
-        label-width="70px"
-      >
-        <el-form-item label="用户名">
+      <el-form :model="resetuserForm" :rules="resetuserRules" ref="resetFormRef" label-width="100px">
+        <el-form-item :label="$t('message.username')">
           <el-input v-model="resetuserForm.username" disabled></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item :label="$t('message.email')" prop="email">
           <el-input v-model="resetuserForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="手机" prop="mobile">
+        <el-form-item :label="$t('message.mobile')" prop="mobile">
           <el-input v-model="resetuserForm.mobile"></el-input>
         </el-form-item>
       </el-form>
 
       <!-- 底部区域,点击取消或者确定的时候隐藏对话框 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="resetUser">确 定</el-button>
+        <el-button @click="addDialogVisible = false">{{ $t('message.cancel') }}</el-button>
+        <el-button type="primary" @click="addUser">{{ $t('message.confirm') }}</el-button>
       </span>
     </el-dialog>
 
-    <!-- 分配角色的对话框-->
-    <el-dialog
-      @close="setRoleClose"
-      title="分配角色"
-      :visible.sync="setRoledialogVisible"
-      width="50%"
-    >
+    <!-- 分配角色的对话框
+    <el-dialog @close="setRoleClose" title="分配角色" :visible.sync="setRoledialogVisible" width="50%">
       <div>
         <p>当前用户：{{ userInfo.username }}</p>
         <p>当前角色：{{ userInfo.role_name }}</p>
         <p>
           分配新角色：
           <el-select v-model="selectedRoleId" placeholder="请选择">
-            <el-option
-              v-for="item in rolesList"
-              :key="item.id"
-              :label="item.roleName"
-              :value="item.id"
-            ></el-option>
+            <el-option v-for="item in rolesList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
           </el-select>
         </p>
       </div>
@@ -188,7 +124,7 @@
         <el-button @click="setRoledialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="saveRole">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -230,7 +166,7 @@ export default {
       //控制修改用户的对话框的显示
       resetDialogVisible: false,
       resetuserForm: {
-        id:"",
+        id: "",
         username: "",
         rid: "",
         email: "",
@@ -253,7 +189,7 @@ export default {
       userForm: {
         username: "",
         password: "",
-        rid:"1",
+        rid: "1",
         email: "",
         mobile: "",
       },
@@ -297,28 +233,36 @@ export default {
   },
   methods: {
     //根据id删除用户
-    async deletUser(id) {
-      const confirmInfo = await this.$confirm(
-        "此操作将永久删除该用户, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => err);
+    async deletUser(id,rid) {
+      console.log('rid',rid)
+      if (rid === 0) {
+        this.$message({
+          message: '没有权限删除该用户',
+          type: 'warning'
+        });
+      } else {
+        const confirmInfo = await this.$confirm(
+          "此操作将永久删除该用户, 是否继续?",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          }
+        ).catch((err) => err);
 
-      //确认删除返回字符串confirm,取消删除返回字符串 cancel
-      if (confirmInfo !== "confirm") return this.$message.info("已取消删除");
-      else {
-        //提交删除请求
-        const { data: res } = await this.$http.delete("users/" + id);
-
-        if (res.meta.status !== 200)
-          return this.$message.error("提交删除请求失败");
+        //确认删除返回字符串confirm,取消删除返回字符串 cancel
+        if (confirmInfo !== "confirm") return this.$message.info("已取消删除");
         else {
-          this.getUserList();
-          this.$message.success("已成功删除");
+          //提交删除请求
+          const { data: res } = await this.$http.delete("users/" + id);
+
+          if (res.meta.status !== 200)
+            return this.$message.error("提交删除请求失败");
+          else {
+            this.getUserList();
+            this.$message.success("已成功删除");
+          }
         }
       }
     },
@@ -330,7 +274,7 @@ export default {
         return this.$message.error("获取id对应用户失败");
       else {
         this.resetuserForm = res.data;
-        this.alteruserForm= res.data;
+        this.alteruserForm = res.data;
       }
     },
     //预验证修改表单，发起修改请求
@@ -340,7 +284,7 @@ export default {
         else {
           //发起修改用户的请求
           const { data: res } = await this.$http.put(
-            "users/" + this.resetuserForm.id,this.alteruserForm
+            "users/" + this.resetuserForm.id, this.alteruserForm
           );
           // console.log(res);
           if (res.meta.status != 200)
@@ -449,8 +393,8 @@ export default {
     },
     //序列自增且不受分页影响，(当前的页码数-1)x当前的每一页中的总条数+1(因为index从0开始计算)
     indexMethod(index) {
-        return (this.queryInfo.pageNum-1)*(this.queryInfo.pageSize)+1+index;
-  },
+      return (this.queryInfo.pageNum - 1) * (this.queryInfo.pageSize) + 1 + index;
+    },
   },
 };
 </script>
