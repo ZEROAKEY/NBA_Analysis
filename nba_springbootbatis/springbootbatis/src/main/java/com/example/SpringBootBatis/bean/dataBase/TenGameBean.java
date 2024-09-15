@@ -9,4 +9,5 @@ public class TenGameBean {
     private String leftGoal;
     private String rightName;
     private String rightGoal;
+    private String currentDate;
 }

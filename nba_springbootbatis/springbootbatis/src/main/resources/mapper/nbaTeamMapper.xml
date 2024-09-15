@@ -3,65 +3,30 @@
 <mapper namespace="com.example.SpringBootBatis.mapper.NbaMapper">
 
     <!-- 获取球队信息并按指定字段排序 -->
-    <select id="getTeamsSortByIndex" parameterType="map" resultType="TeamBean">
+    <select id="getTeamsSortByIndex" parameterType="String" resultType="TeamBean">
         SELECT ts.*, ti.*
         FROM nba_teams_stats ts
         JOIN team_info ti ON ts.team_id = ti.team_id
         <trim prefix="WHERE" suffixOverrides="AND">
-            <!-- 按赛季年份筛选 -->
             <if test="season_year != null">
                 ts.season_year = #{season_year} AND
             </if>
-
-            <!-- 按球队名称筛选（中文球队名映射为英文球队名） -->
-            <if test="team_name != null and team_name != ''">
-                ti.team_name LIKE
-                <trim prefix="CASE" suffix="END">
-                    <trim prefix="WHEN #{team_name} = '亚特兰大老鹰' THEN "> '%Atlanta Hawks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '波士顿凯尔特人' THEN "> '%Boston Celtics%' </trim>
-                    <trim prefix="WHEN #{team_name} = '布鲁克林篮网' THEN "> '%Brooklyn Nets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '夏洛特黄蜂' THEN "> '%Charlotte Hornets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '芝加哥公牛' THEN "> '%Chicago Bulls%' </trim>
-                    <trim prefix="WHEN #{team_name} = '克利夫兰骑士' THEN "> '%Cleveland Cavaliers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '达拉斯独行侠' THEN "> '%Dallas Mavericks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '丹佛掘金' THEN "> '%Denver Nuggets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '底特律活塞' THEN "> '%Detroit Pistons%' </trim>
-                    <trim prefix="WHEN #{team_name} = '金州勇士' THEN "> '%Golden State Warriors%' </trim>
-                    <trim prefix="WHEN #{team_name} = '休斯顿火箭' THEN "> '%Houston Rockets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '印第安纳步行者' THEN "> '%Indiana Pacers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '洛杉矶快船' THEN "> '%Los Angeles Clippers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '洛杉矶湖人' THEN "> '%Los Angeles Lakers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '孟菲斯灰熊' THEN "> '%Memphis Grizzlies%' </trim>
-                    <trim prefix="WHEN #{team_name} = '迈阿密热火' THEN "> '%Miami Heat%' </trim>
-                    <trim prefix="WHEN #{team_name} = '密尔沃基雄鹿' THEN "> '%Milwaukee Bucks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '明尼苏达森林狼' THEN "> '%Minnesota Timberwolves%' </trim>
-                    <trim prefix="WHEN #{team_name} = '新奥尔良鹈鹕' THEN "> '%New Orleans Pelicans%' </trim>
-                    <trim prefix="WHEN #{team_name} = '纽约尼克斯' THEN "> '%New York Knicks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '俄克拉荷马城雷霆' THEN "> '%Oklahoma City Thunder%' </trim>
-                    <trim prefix="WHEN #{team_name} = '奥兰多魔术' THEN "> '%Orlando Magic%' </trim>
-                    <trim prefix="WHEN #{team_name} = '费城76人' THEN "> '%Philadelphia 76ers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '菲尼克斯太阳' THEN "> '%Phoenix Suns%' </trim>
-                    <trim prefix="WHEN #{team_name} = '波特兰开拓者' THEN "> '%Portland Trail Blazers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '萨克拉门托国王' THEN "> '%Sacramento Kings%' </trim>
-                    <trim prefix="WHEN #{team_name} = '圣安东尼奥马刺' THEN "> '%San Antonio Spurs%' </trim>
-                    <trim prefix="WHEN #{team_name} = '多伦多猛龙' THEN "> '%Toronto Raptors%' </trim>
-                    <trim prefix="WHEN #{team_name} = '犹他爵士' THEN "> '%Utah Jazz%' </trim>
-                    <trim prefix="WHEN #{team_name} = '华盛顿奇才' THEN "> '%Washington Wizards%' </trim>
-                </trim>
+            <!-- 如果 team_name 不为空，先从 team_names 表中查询对应的 team_id -->
+            <if test="team_name != null">
+                ts.team_id IN (
+                SELECT tn.team_id
+                FROM team_names tn
+                WHERE tn.team_name LIKE '%' || #{team_name} || '%'
+                ) AND
             </if>
-
-            <!-- 按球队 ID 筛选 -->
             <if test="team_id != null">
                 ts.team_id = #{team_id} AND
             </if>
         </trim>
-
-        <!-- 按指定字段排序 -->
-        <if test="index != null and index != ''">
+        <if test="index != null">
             ORDER BY ${index} DESC
         </if>
     </select>
-
 
     <!-- 获取球队排名信息 -->
     <select id="getTeamsRank" parameterType="String" resultType="TeamRankBean">

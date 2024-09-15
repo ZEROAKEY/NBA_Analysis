@@ -1,5 +1,7 @@
 package com.example.SpringBootBatis.servicelmpl;
 
+import java.time.LocalDate;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,13 @@ public class TenGameServiceImpl implements TenGameService{
 
     @Override
     public List<TenGameBean> getLastTenGames() {
-        return tenGameMapper.getLastTenGameInformation();
+        LocalDate currentDate = LocalDate.now();
+        return tenGameMapper.getLastTenGameInformation(currentDate);
     }
 
     @Override
     public List<TenGameBean> getNextTenGames() {
-        return tenGameMapper.getNextTenGameInformation();
+        LocalDate currentDate = LocalDate.now();
+        return tenGameMapper.getNextTenGameInformation(currentDate);
     }
 }

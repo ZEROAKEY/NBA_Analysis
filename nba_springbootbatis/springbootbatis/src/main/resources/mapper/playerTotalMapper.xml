@@ -4,69 +4,69 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.SpringBootBatis.mapper.PlayerTotalMapper">
 
+    <!-- ResultMap 用于映射数据库字段到 PlayerTotalBean -->
+    <resultMap id="PlayerTotalResultMap" type="com.example.SpringBootBatis.bean.dataBase.PlayerTotalBean">
+        <result property="player_name" column="player_name"/>
+        <result property="position" column="position"/>
+        <result property="age" column="age"/>
+        <result property="team" column="team"/>
+        <result property="games_played" column="games_played"/>
+        <result property="games_started" column="games_started"/>
+        <result property="minutes_played" column="minutes_played"/>
+        <result property="field_goals" column="field_goals"/>
+        <result property="field_goals_attempted" column="field_goals_attempted"/>
+        <result property="field_goal_pct" column="field_goal_pct"/>
+        <result property="three_pointer" column="three_pointer"/>
+        <result property="three_pointer_attempted" column="three_pointer_attempted"/>
+        <result property="three_pointer_pct" column="three_pointer_pct"/>
+        <result property="two_pointer" column="two_pointer"/>
+        <result property="two_pointer_attempted" column="two_pointer_attempted"/>
+        <result property="two_pointer_pct" column="two_pointer_pct"/>
+        <result property="effective_field_goal_pct" column="effective_field_goal_pct"/>
+        <result property="free_throws" column="free_throws"/>
+        <result property="free_throws_attempted" column="free_throws_attempted"/>
+        <result property="free_throw_pct" column="free_throw_pct"/>
+        <result property="offensive_rebounds" column="offensive_rebounds"/>
+        <result property="defensive_rebounds" column="defensive_rebounds"/>
+        <result property="total_rebounds" column="total_rebounds"/>
+        <result property="assists" column="assists"/>
+        <result property="steals" column="steals"/>
+        <result property="blocks" column="blocks"/>
+        <result property="turnovers" column="turnovers"/>
+        <result property="personal_fouls" column="personal_fouls"/>
+        <result property="points" column="points"/>
+        <result property="team_name" column="team_name"/>
+        <result property="team_id" column="team_id"/>
+        <result property="season_year" column="season_year"/>
+    </resultMap>
+
     <!-- 联合查询的SQL，使用 resultMap -->
-    <select id="getPlayerTotalsByEachParameterAndSortByIndex" parameterType="map" resultType="com.example.SpringBootBatis.bean.dataBase.PlayerTotalBean">
+    <select id="getPlayerTotalsByEachParameterAndSortByIndex" parameterType="map" resultMap="PlayerTotalResultMap">
         SELECT * FROM players_info p
         JOIN nba_players_stats s ON p.player_name = s.player_name
         <trim prefix="WHERE" suffixOverrides="AND">
-            <!-- 赛季年份条件 -->
             <if test="season_year != null">
                 s.season_year = #{season_year} AND
             </if>
-
-            <!-- 职位条件，模糊匹配职位且支持“锋卫摇摆人” -->
             <if test="position != null and position != ''">
                 (s.position LIKE '%' || #{position} || '%'
                 <if test="position != '后卫'">
                     OR s.position = '锋卫摇摆人'
                 </if>) AND
             </if>
-
-            <!-- 模糊匹配球员名字 -->
             <if test="player_name != null and player_name != ''">
                 (p.player_name LIKE '%' || #{player_name} || '%') AND
             </if>
-
-            <!-- 通过 team_id 查询 -->
             <if test="team_id != null and team_id != ''">
                 s.team_id = #{team_id} AND
             </if>
-
-            <!-- 中文队名映射到英文队名并支持模糊匹配 -->
+            <!-- 根据 team_name 查询，先从 team_names 表中模糊查询 team_id -->
             <if test="team_name != null and team_name != ''">
-                s.team_name LIKE
-                <trim prefix="CASE" suffix="END">
-                    <trim prefix="WHEN #{team_name} = '亚特兰大老鹰' THEN "> '%Atlanta Hawks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '波士顿凯尔特人' THEN "> '%Boston Celtics%' </trim>
-                    <trim prefix="WHEN #{team_name} = '布鲁克林篮网' THEN "> '%Brooklyn Nets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '夏洛特黄蜂' THEN "> '%Charlotte Hornets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '芝加哥公牛' THEN "> '%Chicago Bulls%' </trim>
-                    <trim prefix="WHEN #{team_name} = '克利夫兰骑士' THEN "> '%Cleveland Cavaliers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '达拉斯独行侠' THEN "> '%Dallas Mavericks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '丹佛掘金' THEN "> '%Denver Nuggets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '底特律活塞' THEN "> '%Detroit Pistons%' </trim>
-                    <trim prefix="WHEN #{team_name} = '金州勇士' THEN "> '%Golden State Warriors%' </trim>
-                    <trim prefix="WHEN #{team_name} = '休斯顿火箭' THEN "> '%Houston Rockets%' </trim>
-                    <trim prefix="WHEN #{team_name} = '印第安纳步行者' THEN "> '%Indiana Pacers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '洛杉矶快船' THEN "> '%Los Angeles Clippers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '洛杉矶湖人' THEN "> '%Los Angeles Lakers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '孟菲斯灰熊' THEN "> '%Memphis Grizzlies%' </trim>
-                    <trim prefix="WHEN #{team_name} = '迈阿密热火' THEN "> '%Miami Heat%' </trim>
-                    <trim prefix="WHEN #{team_name} = '密尔沃基雄鹿' THEN "> '%Milwaukee Bucks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '明尼苏达森林狼' THEN "> '%Minnesota Timberwolves%' </trim>
-                    <trim prefix="WHEN #{team_name} = '新奥尔良鹈鹕' THEN "> '%New Orleans Pelicans%' </trim>
-                    <trim prefix="WHEN #{team_name} = '纽约尼克斯' THEN "> '%New York Knicks%' </trim>
-                    <trim prefix="WHEN #{team_name} = '俄克拉荷马城雷霆' THEN "> '%Oklahoma City Thunder%' </trim>
-                    <trim prefix="WHEN #{team_name} = '奥兰多魔术' THEN "> '%Orlando Magic%' </trim>
-                    <trim prefix="WHEN #{team_name} = '费城76人' THEN "> '%Philadelphia 76ers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '菲尼克斯太阳' THEN "> '%Phoenix Suns%' </trim>
-                    <trim prefix="WHEN #{team_name} = '波特兰开拓者' THEN "> '%Portland Trail Blazers%' </trim>
-                    <trim prefix="WHEN #{team_name} = '萨克拉门托国王' THEN "> '%Sacramento Kings%' </trim>
-                    <trim prefix="WHEN #{team_name} = '圣安东尼奥马刺' THEN "> '%San Antonio Spurs%' </trim>
-                    <trim prefix="WHEN #{team_name} = '多伦多猛龙' THEN "> '%Toronto Raptors%' </trim>
-                    <trim prefix="WHEN #{team_name} = '犹他爵士' THEN "> '%Utah Jazz%' </trim>
-                    <trim prefix="WHEN #{team_name} = '华盛顿奇才' THEN "> '%Washington Wizards%' </trim>
-                </trim>
+                s.team_id IN (
+                SELECT tn.team_id
+                FROM team_names tn
+                WHERE tn.team_name LIKE '%' || #{team_name} || '%'
+                ) AND
             </if>
         </trim>
 
