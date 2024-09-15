@@ -41,7 +41,8 @@
             <el-button type="primary" icon="el-icon-edit" size="mini"
               @click="getUserFormById(scope.row.id)"></el-button>
             <!-- 删除角色按钮 -->
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletUser(scope.row.id)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletUser(scope.row.id,scope.row.rid)"
+              :disabled="scope.row.rid == 0"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -232,28 +233,36 @@ export default {
   },
   methods: {
     //根据id删除用户
-    async deletUser(id) {
-      const confirmInfo = await this.$confirm(
-        "此操作将永久删除该用户, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => err);
+    async deletUser(id,rid) {
+      console.log('rid',rid)
+      if (rid === 0) {
+        this.$message({
+          message: '没有权限删除该用户',
+          type: 'warning'
+        });
+      } else {
+        const confirmInfo = await this.$confirm(
+          "此操作将永久删除该用户, 是否继续?",
+          "提示",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          }
+        ).catch((err) => err);
 
-      //确认删除返回字符串confirm,取消删除返回字符串 cancel
-      if (confirmInfo !== "confirm") return this.$message.info("已取消删除");
-      else {
-        //提交删除请求
-        const { data: res } = await this.$http.delete("users/" + id);
-
-        if (res.meta.status !== 200)
-          return this.$message.error("提交删除请求失败");
+        //确认删除返回字符串confirm,取消删除返回字符串 cancel
+        if (confirmInfo !== "confirm") return this.$message.info("已取消删除");
         else {
-          this.getUserList();
-          this.$message.success("已成功删除");
+          //提交删除请求
+          const { data: res } = await this.$http.delete("users/" + id);
+
+          if (res.meta.status !== 200)
+            return this.$message.error("提交删除请求失败");
+          else {
+            this.getUserList();
+            this.$message.success("已成功删除");
+          }
         }
       }
     },
